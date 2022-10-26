@@ -1,0 +1,25 @@
+.wrap {
+  .ant-layout-sider-children {
+    background-color: white;
+  }
+  height: 100vh;
+  width: 100vw;
+  background-color: red;
+  display: flex;
+  .header {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 0 30px;
+  }
+  .body {
+    width: calc(100% - 200px - 400px);
+    .sider__left {
+      height: 100%;
+    }
+  }
+  .body__right {
+    background-color: #fff;
+    width: 400px;
+  }
+}

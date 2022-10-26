@@ -1,0 +1,122 @@
+.wrap {
+  display: flex;
+  .form__login {
+    background-color: #f6f6f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    img {
+      width: 169px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 82px;
+    }
+  }
+  .image__bg {
+    position: absolute;
+    top: 113px;
+    left: 79px;
+  }
+  .title {
+    position: absolute;
+    top: 407px;
+    left: calc(79px + 375px);
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    color: #ff7506;
+    font-family: Verdana, sans-serif;
+    .title__02 {
+      font-family: Verdana, sans-serif;
+      font-style: normal;
+      font-weight: 900;
+      font-size: 36px;
+      line-height: 54px;
+    }
+    .title__01 {
+      font-family: Verdana, sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 34px;
+      line-height: 51px;
+    }
+  }
+}
+
+//Form login
+.loginform_field__label {
+  width: var(--default-input-width);
+  display: flex;
+  justify-content: flex-start;
+
+  .active {
+    cursor: pointer;
+    color: #e73f3f;
+    font-size: 14px;
+    margin-bottom: 0px !important;
+  }
+  label {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+}
+.submit__btn {
+  width: 162px;
+  height: var(--default-btn-height);
+  border-radius: 10px;
+  background-color: #ff7506;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  &:hover {
+    background-color: #ff7506;
+  }
+}
+.wrap-login__input {
+  width: var(--default-input-width);
+  margin-bottom: 20px;
+}
+.login__input {
+  width: var(--default-input-width);
+  height: var(--default-btn-height);
+  border-radius: 10px;
+  font-size: 16px;
+}
+.ant-input-suffix {
+  font-size: 20px;
+}
+
+.ant-form-item-explain-error {
+  text-align: start;
+}
+
+.ant-input {
+  box-sizing: border-box;
+  border-width: 2px !important;
+}
+.ant-input-affix-wrapper {
+  border-width: 2px !important;
+}
+.ant-input-affix-wrapper-focused {
+  box-shadow: none;
+  border-right-width: 2px !important;
+}
+.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled) {
+  &:focus {
+    box-sizing: border-box;
+    border-right-width: 222px;
+  }
+  &:hover {
+    box-sizing: border-box;
+    border-right-width: 2px;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  /* START WEBKIT */
+  INPUT[type="password"] {
+    font-family: Verdana, sans-serif;
+  }
+} /* END WEBKIT */
