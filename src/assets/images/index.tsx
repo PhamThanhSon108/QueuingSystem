@@ -1,3 +1,5 @@
+import IconArrow from "./icons/IconArrow";
+import IconBell from "./icons/IconBell";
 import IconDashBoard from "./icons/IconDashBoard";
 import IconDevice from "./icons/IconDevice";
 import IconLogout from "./icons/IconLogout";
@@ -18,6 +20,8 @@ export const images = {
     device: <IconDevice />,
     service: <IconSevice />,
     logout: <IconLogout />,
+    bell: <IconBell />,
+    arrow: <IconArrow styles={{ color: "#FF7506" }} />,
   },
   temp: {
     login: <ImageLogin />,

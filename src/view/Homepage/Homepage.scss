@@ -1,0 +1,117 @@
+.homepage__wrap {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 0px 24px 30px 24px;
+
+  .homepage__title {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 36px;
+
+    color: var(--orange);
+  }
+  .homepage__list-information {
+    height: 120px;
+    margin-bottom: 16px;
+    padding: 0px 5px 0px 4px;
+    .hompage__item-information {
+      height: 100%;
+      .ant-card {
+        height: 100%;
+        border-radius: 10px;
+      }
+    }
+  }
+  .homepage__chart {
+    height: 484px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: flex-start;
+
+    .ant-typography {
+      flex-direction: column;
+      display: flex;
+      align-items: flex-start;
+      .homepage__chart-title {
+        margin-bottom: 0px;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 30px;
+        color: #282739;
+      }
+      .homepage__chart-month {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 21px;
+
+        color: #a9a9b0;
+      }
+    }
+    .filter__wrap {
+      display: flex;
+      align-items: center;
+      &-title {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 24px;
+        color: #282739;
+        padding-right: 8px;
+      }
+      &-select {
+        box-sizing: border-box;
+
+        /* Auto layout */
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        background: #ffffff;
+
+        .ant-select-selector {
+          padding: 10px 12px 10px 10px;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          width: 106px;
+          height: 42px;
+          border-radius: 8px;
+
+          input {
+            height: 100%;
+            width: 100%;
+          }
+          .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+            color: rgba(0, 0, 0, 0.85);
+            font-weight: 600;
+            background-color: #fff2e7 !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+.homepage__oveview-chart {
+  width: 353px;
+  height: 83px;
+  background: #ffffff;
+  box-shadow: 2px 2px 15px rgba(70, 64, 67, 0.1);
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+.homepage__calendar {
+  height: 336px;
+  width: 353px;
+  box-shadow: 2px 2px 15px rgba(70, 64, 67, 0.1);
+  border-radius: 12px;
+}

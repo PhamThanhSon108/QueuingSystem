@@ -50,7 +50,7 @@ export default React.memo(function FormLogin() {
                 },
               ]}
             >
-              <Input className={"login__input"} placeholder="Username" />
+              <Input className={"login__input"} placeholder="Nhập tài khoản" />
             </Form.Item>
             <div className="loginform_field__label">
               <label>Mật khẩu *</label>
@@ -68,7 +68,7 @@ export default React.memo(function FormLogin() {
             >
               <Input.Password
                 className={"login__input"}
-                placeholder="input password"
+                placeholder="Nhập mật khẩu"
                 iconRender={(visible) =>
                   visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                 }

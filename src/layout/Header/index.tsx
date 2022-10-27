@@ -9,9 +9,9 @@ export default function HeaderLayout() {
     <div>
       {
         <Breadcrumb>
-          <BreadcrumbItem>
+          <BreadcrumbItem className="breadcrumb">
             {location.pathname === "/"
-              ? "Home"
+              ? "Dashboard"
               : location.pathname.slice(1, location.pathname.length)}
           </BreadcrumbItem>
         </Breadcrumb>

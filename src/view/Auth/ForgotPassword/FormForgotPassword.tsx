@@ -3,14 +3,22 @@ import FormItem from "antd/es/form/FormItem";
 import { Button, Form, Input, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 
-export default function FormForgotPassword() {
+export default function FormForgotPassword({
+  setReset,
+}: {
+  setReset: Function;
+}) {
   const navigate = useNavigate();
   const handleCancel = () => {
     navigate("/login");
   };
   const handleContinue = () => {};
   return (
-    <Form>
+    <Form
+      onFinish={() => {
+        setReset(true);
+      }}
+    >
       <Typography>
         <div className="reset__title">Đặt lại mật khẩu</div>
         <div className="reset__content">

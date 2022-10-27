@@ -4,9 +4,13 @@
   --default-btn-height: 44px;
   --default-input-width: 400px;
   --gray: #7e7d88;
+  --orange: #ff7506;
   --while: #fff;
 }
 
 .ant-form-item-explain-error {
   margin-top: 5px;
+}
+body {
+  overflow-x: hidden; /* Hide horizontal scrollbar */
 }

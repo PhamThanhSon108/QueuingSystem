@@ -18,7 +18,11 @@ function App() {
                 : Fragment;
             return (
               <Route
-                element={<Layout>{value?.component}</Layout>}
+                element={
+                  <Layout dashboard={value.path === "/"}>
+                    {value?.component}
+                  </Layout>
+                }
                 path={value?.path}
               />
             );

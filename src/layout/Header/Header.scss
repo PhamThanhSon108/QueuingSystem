@@ -1,0 +1,51 @@
+.userheader__wrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  .bell {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-right: 24px;
+    color: #ffac6a;
+    cursor: pointer;
+    &:focus {
+      color: var(--orange);
+    }
+    &:hover {
+      color: #ff7506;
+    }
+  }
+}
+.userinfor__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 8px;
+  div {
+    line-height: 15px;
+  }
+  .welcome {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #7e7d88;
+  }
+  .name {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    color: #535261;
+  }
+}
+
+.breadcrumb {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 30px;
+  color: var(--orange);
+}
