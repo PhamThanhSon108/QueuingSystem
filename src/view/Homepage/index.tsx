@@ -1,5 +1,14 @@
 import { ArrowDownOutlined } from "@ant-design/icons";
-import { Card, Col, Dropdown, Row, Select, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Dropdown,
+  Row,
+  Select,
+  Tag,
+  Typography,
+} from "antd";
 import { Option } from "antd/lib/mentions";
 import React from "react";
 import { images } from "../../assets/images";
@@ -16,17 +25,97 @@ export default function Homepage() {
           </Typography.Title>
         </Row>
         <Row className="homepage__list-information" gutter={13}>
-          <Col span={6} className="hompage__item-information">
-            <Card />
+          <Col span={6} className="homepage__item-information">
+            <div className="homepage__item-information-card">
+              <div className="homepage__item-information-card-head">
+                <div className="homepage__item-information-card-head-icon">
+                  {images.icon.numericalorder}
+                </div>
+                <span className="homepage__item-information-card-head-title">
+                  Số thứ tự đã cấp
+                </span>
+              </div>
+              <div className="homepage__item-information-card-body">
+                <span className="homepage__item-information-card-body-number">
+                  4221
+                </span>
+                <Tag
+                  className="homepage__item-information-card-body-percen"
+                  icon={<ArrowDownOutlined />}
+                >
+                  32.4%
+                </Tag>
+              </div>
+            </div>
           </Col>
-          <Col span={6} className="hompage__item-information">
-            <Card />
+          <Col span={6} className="homepage__item-information">
+            <div className="homepage__item-information-card">
+              <div className="homepage__item-information-card-head">
+                <div className="homepage__item-information-card-head-icon">
+                  {images.icon.numericalorderused}
+                </div>
+                <span className="homepage__item-information-card-head-title">
+                  Số thứ tự đã sử dụng
+                </span>
+              </div>
+              <div className="homepage__item-information-card-body">
+                <span className="homepage__item-information-card-body-number">
+                  4221
+                </span>
+                <Tag
+                  className="homepage__item-information-card-body-percen"
+                  icon={<ArrowDownOutlined />}
+                >
+                  32.4%
+                </Tag>
+              </div>
+            </div>
           </Col>
-          <Col span={6} className="hompage__item-information">
-            <Card />
+          <Col span={6} className="homepage__item-information">
+            <div className="homepage__item-information-card">
+              <div className="homepage__item-information-card-head">
+                <div className="homepage__item-information-card-head-icon">
+                  {images.icon.numericalorderwait}
+                </div>
+                <span className="homepage__item-information-card-head-title">
+                  Số thứ tự đang chờ
+                </span>
+              </div>
+              <div className="homepage__item-information-card-body">
+                <span className="homepage__item-information-card-body-number">
+                  4221
+                </span>
+                <Tag
+                  className="homepage__item-information-card-body-percen"
+                  icon={<ArrowDownOutlined />}
+                >
+                  32.4%
+                </Tag>
+              </div>
+            </div>
           </Col>
-          <Col span={6} className="hompage__item-information">
-            <Card />
+          <Col span={6} className="homepage__item-information">
+            <div className="homepage__item-information-card">
+              <div className="homepage__item-information-card-head">
+                <div className="homepage__item-information-card-head-icon">
+                  {images.icon.numericalorderskiped}
+                </div>
+                <span className="homepage__item-information-card-head-title">
+                  Số thứ tự đã bỏ qua
+                </span>
+              </div>
+              <div className="homepage__item-information-card-body">
+                <span className="homepage__item-information-card-body-number">
+                  4221
+                </span>
+                <Tag
+                  className="homepage__item-information-card-body-percen"
+                  icon={<ArrowDownOutlined />}
+                >
+                  32.4%
+                </Tag>
+              </div>
+            </div>
           </Col>
         </Row>
         <Row className="homepage__chart">

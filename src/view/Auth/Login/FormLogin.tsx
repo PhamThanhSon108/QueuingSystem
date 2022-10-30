@@ -24,7 +24,6 @@ export default React.memo(function FormLogin() {
           {
             validator: async (_, names) => {
               if (names.password.length == 0 || names.username.length == 0) {
-                console.log(names, "names");
                 return Promise.reject(new Error(names));
               }
             },

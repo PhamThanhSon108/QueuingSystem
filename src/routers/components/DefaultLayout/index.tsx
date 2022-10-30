@@ -27,7 +27,7 @@ export default function DefaultLayout({
           <>
             <Layout
               className="body"
-              style={{ width: "calc(100vw - 200px - 400px);" }}
+              style={{ width: "calc(100vw - 200px - 400px)" }}
             >
               <Layout>
                 <Header className="header" style={{ alignItems: "flex-end" }}>

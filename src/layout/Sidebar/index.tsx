@@ -39,7 +39,6 @@ export default function Sidebar() {
   const location = useLocation();
   const handleOnselect = (item: SelectInfo) => {
     navigate(`${item.key}`);
-    console.log(location.pathname, ["navi"]);
   };
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>

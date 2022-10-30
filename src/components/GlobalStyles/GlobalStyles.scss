@@ -12,5 +12,6 @@
   margin-top: 5px;
 }
 body {
-  overflow-x: hidden; /* Hide horizontal scrollbar */
+  box-sizing: border-box !important;
+  // overflow-x: hidden; /* Hide horizontal scrollbar */
 }

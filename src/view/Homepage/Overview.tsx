@@ -1,21 +1,13 @@
 import { ArrowDownOutlined } from "@ant-design/icons";
-import {
-  Badge,
-  Calendar,
-  Card,
-  Col,
-  Dropdown,
-  Row,
-  Select,
-  Space,
-  Typography,
-} from "antd";
-import { Option } from "antd/lib/mentions";
-import React from "react";
+import Icon from "@ant-design/icons/lib/components/AntdIcon";
+import { Badge, Card, Col, Row, Space, Typography } from "antd";
 import { images } from "../../assets/images";
-import CalendarOverview from "./CalendarOverview";
+
+import CalendarOverview from "./Calendar/CalendarOverview";
+import RadialChart from "./Chart/RadialChart";
 
 import "./Homepage.scss";
+
 export default function Overview() {
   return (
     <div
@@ -27,19 +19,90 @@ export default function Overview() {
           Tổng quan
         </Typography.Title>
       </Row>
-      <Row className="homepage__oveview-chart">
-        {/* <Space direction="vertical">
-          <Badge color="#f50" text="Đang hoạt động" />
+      <Row className="homepage__overview-chart-wrap">
+        <div className="homepage__overview-chart">
+          <RadialChart />
+        </div>
+        <Col span={7} className={"homepage__overview-chart-total"}>
+          <span className="homepage__overview-chart-total-num">4.221</span>
+          <div className="homepage__overview-chart-total-title orange">
+            {images.icon.device}
+            <span>Thiết bị</span>
+          </div>
+        </Col>
+        <Col span={9} className="homepage__overview-information">
+          <div className="homepage__overview-information-title">
+            <div>
+              <Badge color="#f50" text="Đang hoạt động" />
+            </div>
+            <div>
+              <Badge color="#f50" text="Ngưng hoạt động" />
+            </div>
+          </div>
+        </Col>
+        <Col span={3} className="homepage__overview-information-num">
+          <div className="homepage__overview-information-num">
+            <div>12345</div> <div>12345</div>
+          </div>
+        </Col>
+      </Row>
+      <Row className="homepage__overview-chart-wrap">
+        <div className="homepage__overview-chart">
+          <RadialChart color="#4277ff" />
+        </div>
+        <Col span={7} className={"homepage__overview-chart-total"}>
+          <span className="homepage__overview-chart-total-num">4.221</span>
+          <div className="homepage__overview-chart-total-title blue">
+            {images.icon.service}
+            <span>Dịch vụ</span>
+          </div>
+        </Col>
+        <Col span={9} className="homepage__overview-information">
+          <div className="homepage__overview-information-title">
+            <div>
+              <Badge color="#f50" text="Đang hoạt động" />
+            </div>
+            <div>
+              <Badge color="#f50" text="Ngưng hoạt động" />
+            </div>
+          </div>
+        </Col>
+        <Col span={3} className="homepage__overview-information-num">
+          <div className="homepage__overview-information-num blue">
+            <div>12345</div> <div>12345</div>
+          </div>
+        </Col>
+      </Row>
 
-          <Badge color="hsl(102, 53%, 61%)" text="hsl(102, 53%, 61%)" />
-          <Badge color="hwb(205 6% 9%)" text="hwb(205 6% 9%)" />
-        </Space> */}
-      </Row>
-      <Row className="homepage__oveview-chart">
-        <Card style={{ width: "100%", borderRadius: "12px" }} />
-      </Row>
-      <Row className="homepage__oveview-chart">
-        <Card style={{ width: "100%", borderRadius: "12px" }} />
+      <Row className="homepage__overview-chart-wrap">
+        <div className="homepage__overview-chart">
+          <RadialChart color="#35c75a" />
+        </div>
+        <Col span={7} className={"homepage__overview-chart-total"}>
+          <span className="homepage__overview-chart-total-num">4.221</span>
+          <div className="homepage__overview-chart-total-title green">
+            {images.icon.nums}
+            <span>Cấp số</span>
+          </div>
+        </Col>
+        <Col span={9} className="homepage__overview-information">
+          <div className="homepage__overview-information-title">
+            <div>
+              <Badge color="#f50" text="Đã sử dụng" />
+            </div>
+            <div>
+              <Badge color="#f50" text="Đang chờ" />
+            </div>
+            <div>
+              <Badge color="#f50" text="Đang chờ" />
+            </div>
+          </div>
+        </Col>
+        <Col span={3} className="homepage__overview-information-num">
+          <div className="homepage__overview-information-num green">
+            <div>3721</div> <div>688</div> <div>72</div>
+          </div>
+        </Col>
       </Row>
 
       <Row className="homepage__calendar">

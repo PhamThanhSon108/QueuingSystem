@@ -32,7 +32,6 @@ export default function FormForgotPassword({
           {
             pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
             message: "Bạn nhập sai định dạng của email",
-            whitespace: true,
           },
         ]}
       >
