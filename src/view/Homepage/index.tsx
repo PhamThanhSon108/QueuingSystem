@@ -1,16 +1,6 @@
 import { ArrowDownOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Card,
-  Col,
-  Dropdown,
-  Row,
-  Select,
-  Tag,
-  Typography,
-} from "antd";
+import { Col, Row, Select, Tag, Typography } from "antd";
 import { Option } from "antd/lib/mentions";
-import React from "react";
 import { images } from "../../assets/images";
 import Chart from "./Chart";
 import "./Homepage.scss";

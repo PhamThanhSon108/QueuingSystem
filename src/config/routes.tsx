@@ -9,5 +9,6 @@ const routes = {
   //auth
   login: "/login",
   reset: "/reset",
+  profile: "/profile",
 };
 export default routes;

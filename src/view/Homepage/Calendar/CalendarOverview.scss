@@ -1,3 +1,6 @@
+.site-calendar-customize-header-wrapper {
+  height: 336px;
+}
 .calendar__overview-header {
   width: 100%;
   display: flex;
@@ -31,7 +34,8 @@
     }
   }
 }
-
+.ant-picker-body {
+}
 .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
   &:hover {
     width: 36px;

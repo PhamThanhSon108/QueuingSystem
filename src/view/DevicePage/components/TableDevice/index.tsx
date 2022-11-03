@@ -7,6 +7,7 @@ import {
 import { Badge, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React, { ReactElement, ReactNode } from "react";
+import { Link } from "react-router-dom";
 
 interface DataType {
   id: string;
@@ -106,7 +107,8 @@ const columns: ColumnsType<DataType> = [
   {
     key: "update",
     render: (_, record) => (
-      <div
+      <Link
+        to={"/device/update"}
         style={{
           display: "flex",
           justifyContent: "center",
@@ -115,7 +117,7 @@ const columns: ColumnsType<DataType> = [
         }}
       >
         Cập nhật
-      </div>
+      </Link>
     ),
   },
 ];

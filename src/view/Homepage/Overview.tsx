@@ -12,7 +12,7 @@ export default function Overview() {
   return (
     <div
       className="homepage__wrap"
-      style={{ paddingLeft: "24px", paddingRight: "24px" }}
+      style={{ paddingLeft: "24px", paddingRight: "24px", height: "93vh" }}
     >
       <Row>
         <Typography.Title className="homepage__title">
@@ -105,7 +105,7 @@ export default function Overview() {
         </Col>
       </Row>
 
-      <Row className="homepage__calendar">
+      <Row className="homepage__calendar" style={{ height: 100 }}>
         <CalendarOverview />
       </Row>
     </div>

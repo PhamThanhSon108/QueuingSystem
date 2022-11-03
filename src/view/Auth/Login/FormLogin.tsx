@@ -1,13 +1,45 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { auth } from "../../../firebase/config";
+import { setToken } from "../../../modules/authentication/profileStore";
+import { useAppDispatch } from "../../../hooks";
+type LoginStatus = "pending" | "fulfill" | "reject" | undefined;
 export default React.memo(function FormLogin() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [form] = Form.useForm();
-  const handleFinish = (e: any) => {
-    navigate("/");
+
+  const [loginStatus, setLoginStatus] = useState<LoginStatus>();
+
+  const handleFinish = (data: any) => {
+    setLoginStatus("pending");
+    delete data.remember;
+
+    signInWithEmailAndPassword(auth, data.names.username, data.names.password)
+      .then((userCredential) => {
+        userCredential.user
+          .getIdToken()
+          .then((token) => {
+            setLoginStatus("fulfill");
+            document.cookie = `accessToken=${token}; SameSite=None; Secure`;
+            dispatch(setToken({ token, remember: true }));
+            setTimeout(() => {
+              navigate("/");
+            }, 300);
+          })
+          .catch((error) => {
+            setLoginStatus("reject");
+          });
+      })
+      .catch(() => {
+        setLoginStatus("reject");
+        //  setErrorStatus(formatMessage("login.account.error"));
+        signOut(auth);
+      });
   };
 
   return (
@@ -85,9 +117,17 @@ export default React.memo(function FormLogin() {
                 </div>
               </div>
             )}
+            {loginStatus === "reject" && (
+              <div className="wrap-login__input">
+                <div className="loginform_field__label">
+                  <label className="active">Thông tin đăng nhập sai</label>
+                </div>
+              </div>
+            )}
 
             <Form.Item className="wrap-login__input">
               <Button
+                loading={loginStatus === "pending"}
                 type="primary"
                 htmlType="submit"
                 className="login-form-button submit__btn"

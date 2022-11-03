@@ -17,9 +17,9 @@ const ChangeTravelModal = ({
 
   const [title, setTitle] = useState<string | undefined>(Travel?.title); // We are initializing useStates if book variable has title or author.
   const [author, setAuthor] = useState<string | undefined>(Travel?.author);
-  const loadingAddTravels = useAppSelector(
-    (state) => state.travel.statusAddTravels
-  );
+  // const loadingAddTravels = useAppSelector(
+  //   (state) => state.travel.statusAddTravels
+  // );
   const handleChangeTravel = () => {
     if (title?.trim() === Travel.title && author?.trim() === Travel.author) {
       return;

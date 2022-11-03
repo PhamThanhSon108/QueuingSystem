@@ -8,9 +8,9 @@ const AddTravelModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState<string | undefined>(""); // We are initializing useStates if book variable has title or author.
   const [author, setAuthor] = useState<string | undefined>("");
-  const loadingAddTravels = useAppSelector(
-    (state) => state.travel.statusAddTravels
-  );
+  // const loadingAddTravels = useAppSelector(
+  //   (state) => state.travel.statusAddTravels
+  // );
 
   const handleAddTravel = () => {
     if (title?.trim() && author?.trim()) {
@@ -38,7 +38,7 @@ const AddTravelModal = () => {
   return (
     <>
       <Button
-        loading={loadingAddTravels === "loading"}
+        // loading={loadingAddTravels === "loading"}
         type="primary"
         onClick={showModal}
       >

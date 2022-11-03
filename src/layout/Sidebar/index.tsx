@@ -6,6 +6,8 @@ import { SelectInfo } from "rc-menu/lib/interface";
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { images } from "../../assets/images";
+import { useAppDispatch } from "../../hooks";
+import { setToken } from "../../modules/authentication/profileStore";
 import "./Sidebar.scss";
 type MenuItem = Required<MenuProps>["items"][number];
 function getItem(
@@ -37,6 +39,7 @@ const items: MenuItem[] = [
 export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
   const handleOnselect = (item: SelectInfo) => {
     navigate(`${item.key}`);
   };
@@ -58,6 +61,7 @@ export default function Sidebar() {
         <Button
           icon={images.icon.logout}
           onClick={() => {
+            dispatch(setToken({ token: "", remember: false }));
             navigate("/login");
           }}
         >

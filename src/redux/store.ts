@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { travelSlice } from './TravelSlice';
-
+import { configureStore } from "@reduxjs/toolkit";
+import profileStore from "../modules/authentication/profileStore";
+import { travelSlice } from "./TravelSlice";
 
 export const store = configureStore({
   reducer: {
- travel: travelSlice.reducer,
+    profile: profileStore.reducer,
   },
 });
 
