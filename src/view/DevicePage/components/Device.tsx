@@ -1,19 +1,30 @@
-import { Col, Input, Pagination, Row, Select, Typography } from "antd";
+import { Col, Row, Select, Typography } from "antd";
 import { Option } from "antd/lib/mentions";
 
 import "../DevicePage.scss";
 import Search from "antd/lib/input/Search";
 import TableDevice from "./TableDevice";
 import { images } from "../../../assets/images";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { getDevices } from "../../../modules/device/respository";
+import { useEffect } from "react";
+import { deviceStore } from "../../../modules/device/deviceStore";
+import { useAppDispatch } from "../../../hooks";
 type deviceProps = {
   setStatus?: (value: string) => void;
 };
 export default function Device({ setStatus }: deviceProps) {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const handleAddDevice = () => {
     navigate("add");
   };
+  useEffect(() => {
+    getDevices().then((deviceSnap) => {
+      console.log(deviceSnap, "device snap");
+      dispatch(deviceStore.actions.fetchDevices({ devices: deviceSnap }));
+    });
+  }, []);
   return (
     <div className="devicepage">
       <Row className="devicepage__title">
@@ -82,12 +93,13 @@ export default function Device({ setStatus }: deviceProps) {
             <div className="devicepage__body-modify-container-icon">
               {images.icon.addDevice}
             </div>
-            <div
+            <Link
+              to={"add"}
               className="devicepage__body-modify-container-label"
               onClick={handleAddDevice}
             >
               Thêm thiết bị
-            </div>
+            </Link>
           </div>
         </Col>
       </Row>

@@ -5,9 +5,7 @@ import {
   Selector,
 } from "@reduxjs/toolkit";
 import UserEntity from "../user/entity";
-// import lodash from "lodash";
-// import { RootState } from "@modules";
-// import UserEntity from "@modules/user/entity";
+
 type RootState = any;
 interface IStore {
   statusLogin?: boolean;
@@ -17,6 +15,9 @@ interface IStore {
 export const removeProfile = createAction("authentication/removeProfile");
 export const setToken = createAction<{ token: any; remember: boolean }>(
   "authentication/setToken"
+);
+export const updateProfileInStore = createAction<{ user: any }>(
+  "authentication/getProfile"
 );
 
 interface IStore {
@@ -75,6 +76,7 @@ const profileStore = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
       .addCase(removeProfile, (state: any) => {
         return {
           ...state,
@@ -88,6 +90,11 @@ const profileStore = createSlice({
       .addCase(setToken, (state, action) =>
         Object.assign(state, action.payload, {
           statusLogin: !action.payload.token,
+        })
+      )
+      .addCase(updateProfileInStore, (state, action) =>
+        Object.assign(state, action.payload, {
+          user: action.payload.user,
         })
       );
   },

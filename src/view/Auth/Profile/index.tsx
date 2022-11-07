@@ -5,6 +5,13 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import AvatarUser from "./components/AvatarUser";
+import {
+  updateProfileInStore,
+  UserSelector,
+} from "../../../modules/authentication/profileStore";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { useDispatch } from "react-redux";
+import { getProfile } from "../../../modules/authentication/repository";
 
 // import AvatarUser from './components/AvatarUser';
 // import ModalChangePassWord from './components/ModalChangePassWord';
@@ -14,59 +21,20 @@ const Profile = () => {
   const linkAvata =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj4RibnQG5pD0n3phSU3-shJNYP4-dRtkzIg&usqp=CAU";
   const history = useNavigate();
+  const dispatch = useAppDispatch();
   const [form] = Form.useForm();
+  const user = useAppSelector((state) => state.profile.user);
 
-  const showModal = () => {
-    // setIsVisible(true);
-  };
-
-  // useEffect(() => {
-  //   if (user != null) {
-  //     setIsDisableForm(true);
-  //     form.setFieldsValue(user);
-  //   }
-  // }, [form, user]);
-
-  // const arrayAction: IArrayAction[] = [
-  //   {
-  //     iconType: 'edit',
-  //     name: 'common.edit',
-  //     handleAction: () => setIsDisableForm(false),
-  //   },
-  //   {
-  //     iconType: 'key',
-  //     name: 'common.change.password',
-  //     handleAction: () => showModal(),
-  //   },
-  //   {
-  //     iconType: 'logOut',
-  //     name: 'common.logout',
-  //     handleAction: () => {
-  //       DeleteConfirm({
-  //         title: formatMessage('common.logout.title'),
-  //         content: formatMessage('common.logout.content'),
-  //         handleOk: () => {
-  //           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  //           store.dispatch(removeProfile()), history.push('/login');
-  //         },
-  //       });
-  //     },
-  //   },
-  // ];
-
-  const chooseFile = (file: any) => {
-    form.setFieldsValue({ avatar: file });
-  };
-
-  const onUpdateProfile = (values: any) => {
-    // if (values) {
-    //   updateAccounts.execute(values).then(() => {
-    //     authenticationPresenter.getProfile().then(() => {
-    //       setIsDisableForm(true);
-    //     });
-    //   });
-    // }
-  };
+  useEffect(() => {
+    if (user != null) {
+      form.setFieldsValue(user);
+    }
+  }, [form, user]);
+  useEffect(() => {
+    getProfile("iswFzKlZkLdTaJvJNEib").then((user) => {
+      dispatch(updateProfileInStore({ user }));
+    });
+  }, []);
 
   return (
     <div>
@@ -77,7 +45,6 @@ const Profile = () => {
             layout="vertical"
             requiredMark={false}
             form={form}
-            onFinish={onUpdateProfile}
             id="userProfileForm"
           >
             <Row className="profile-form__box" justify="center">
@@ -95,14 +62,14 @@ const Profile = () => {
                     lineHeight: "36px",
                   }}
                 >
-                  Phạm Thanh Sơn
+                  {user?.userFullName}
                 </Typography.Title>
               </Col>
               <Col span={9}>
                 <div className="main-form">
                   <Form.Item
                     label={"Tên người dùng"}
-                    name="userFullName"
+                    name="userFullname"
                     rules={[
                       {
                         required: true,
@@ -178,7 +145,7 @@ const Profile = () => {
                   </Form.Item>
                   <Form.Item
                     label={"Mật khẩu"}
-                    name="passWord"
+                    name="password"
                     rules={[
                       {
                         required: true,
@@ -197,7 +164,7 @@ const Profile = () => {
                   </Form.Item>
                   <Form.Item
                     label={"Vai trò"}
-                    name="rule"
+                    name="role"
                     rules={[
                       {
                         required: true,

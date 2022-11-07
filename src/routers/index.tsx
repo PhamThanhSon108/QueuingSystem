@@ -5,6 +5,7 @@ import Login from "../view/Auth/Login";
 import Profile from "../view/Auth/Profile";
 import DevicePage from "../view/DevicePage";
 import AddDevice from "../view/DevicePage/components/AddDevice";
+import DetailDevice from "../view/DevicePage/components/DetailDevice";
 import Device from "../view/DevicePage/components/Device";
 import UpdateDevice from "../view/DevicePage/components/UpdateDevice";
 import Homepage from "../view/Homepage";
@@ -23,7 +24,8 @@ export const privateRoutes: routeType[] = [
     children: [
       { path: "", component: <Device /> },
       { path: "add", component: <AddDevice /> },
-      { path: "update", component: <UpdateDevice /> },
+      { path: "update/:id", component: <UpdateDevice /> },
+      { path: "detail/:id", component: <DetailDevice /> },
     ],
   },
   { path: routes.service, component: <ServicePage /> },

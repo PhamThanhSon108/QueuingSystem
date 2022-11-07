@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import profileStore from "../modules/authentication/profileStore";
+import { deviceStore } from "../modules/device/deviceStore";
 import { travelSlice } from "./TravelSlice";
 
 export const store = configureStore({
   reducer: {
     profile: profileStore.reducer,
+    device: deviceStore.reducer,
   },
 });
 

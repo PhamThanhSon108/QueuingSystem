@@ -124,6 +124,19 @@
 //   updateProfile,
 //   updateProfileUser,
 // };
+
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { getAuth } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import React from "react";
+import { db } from "../../firebase/config";
 
 export default function repository() {}
+export const getProfile = async (email?: string) => {
+  const emailCurrent = email || getAuth().currentUser?.email;
+  if (emailCurrent) {
+    const docRef = doc(db, "users", emailCurrent);
+    const docSnap = await getDoc(docRef);
+    return docSnap.data();
+  }
+};

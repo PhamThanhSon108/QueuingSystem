@@ -1,7 +1,11 @@
-import { Button, Col, Form, Input, Row, Typography } from "antd";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Button, Col, Form, Input, Row, Select, Typography } from "antd";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "./AddDevice.scss";
+import { useAppSelector } from "../../../hooks";
+import { updateDevice } from "../../../modules/device/respository";
+import { Option } from "antd/lib/mentions";
+const DeviceTypeOption = ["Kiosk", "Display counter"];
 const labelFormDevice = {
   deviceId: {
     label: "Mã thiết bị",
@@ -25,15 +29,44 @@ const labelFormDevice = {
     label: "Dịch vụ sử dụng",
   },
 };
+const DeviceServiceOption = [
+  "Khám tim mạch",
+  "Khám sản phụ khoa",
+  "Khám răng hàm mặt",
+  "Khám tai mũi họng",
+  "Khám hô hấp",
+  "Khám tổng quát",
+];
 export default function UpdateDevice() {
   const [form] = Form.useForm();
+  const { id } = useParams();
+  console.log(id, "id off update device");
   const navigate = useNavigate();
   const handleCancel = () => {
     navigate("/device");
   };
-  const handleConfirm = () => {
-    navigate("/device");
+  const handleConfirm = () => {};
+  const devices: Array<any> | undefined = useAppSelector((state) => {
+    return state.device.devices;
+  });
+  const device = devices?.find((value) => value.id == id);
+  const [loading, setLoading] = useState<boolean>(false);
+  const handleUpdateDevice = (data: FormData) => {
+    console.log(data);
+    if (id) {
+      setLoading(true);
+      updateDevice({ device: data, id: id }).then(() => {
+        setLoading(false);
+        navigate("/device");
+      });
+    }
   };
+  useEffect(() => {
+    if (id != null) {
+      form.setFieldsValue(device);
+    }
+  }, [form, id]);
+
   return (
     <div className="devicepage">
       <Row className="devicepage__title">
@@ -43,10 +76,11 @@ export default function UpdateDevice() {
       <Row className="wrap__add-device">
         <div className="add-device__form">
           <Form
-            name="addDeviceForm"
+            name="updateDeviceForm"
             layout="vertical"
             form={form}
-            id="addDeviceForm"
+            id="updateDeviceForm"
+            onFinish={handleUpdateDevice}
           >
             <Row>
               <div>
@@ -130,10 +164,11 @@ export default function UpdateDevice() {
                       },
                     ]}
                   >
-                    <Input
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
+                    <Select>
+                      {DeviceTypeOption.map((value) => (
+                        <Option value={value}>{value}</Option>
+                      ))}
+                    </Select>
                   </Form.Item>
                   <Form.Item
                     label={labelFormDevice.deviceNameToLogin.label}
@@ -184,17 +219,13 @@ export default function UpdateDevice() {
                       {
                         required: true,
                       },
-                      {
-                        max: 99,
-                        whitespace: true,
-                      },
                     ]}
                   >
-                    <Input
-                      style={{ width: "100%" }}
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
+                    <Select mode="multiple">
+                      {DeviceServiceOption.map((value) => (
+                        <Option value={value}>{value}</Option>
+                      ))}
+                    </Select>
                   </Form.Item>
                 </div>
               </Col>
@@ -212,7 +243,13 @@ export default function UpdateDevice() {
           <Button className="cancel" onClick={handleCancel}>
             Hủy bỏ
           </Button>
-          <Button className="confirm" onClick={handleConfirm}>
+          <Button
+            className="confirm"
+            htmlType="submit"
+            form="updateDeviceForm"
+            loading={loading}
+            onClick={handleConfirm}
+          >
             Cập nhật
           </Button>
         </div>

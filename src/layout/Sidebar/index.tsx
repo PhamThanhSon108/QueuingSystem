@@ -1,11 +1,13 @@
 import { MoreOutlined } from "@ant-design/icons";
 import { Button, Menu } from "antd";
 import { icons } from "antd/lib/image/PreviewGroup";
+import { signOut } from "firebase/auth";
 import { MenuProps } from "rc-menu";
 import { SelectInfo } from "rc-menu/lib/interface";
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { images } from "../../assets/images";
+import { auth } from "../../firebase/config";
 import { useAppDispatch } from "../../hooks";
 import { setToken } from "../../modules/authentication/profileStore";
 import "./Sidebar.scss";
@@ -61,8 +63,12 @@ export default function Sidebar() {
         <Button
           icon={images.icon.logout}
           onClick={() => {
-            dispatch(setToken({ token: "", remember: false }));
-            navigate("/login");
+            signOut(auth).then(() => {
+              dispatch(setToken({ token: "", remember: false }));
+              document.cookie = `accessToken=; SameSite=None; Secure`;
+
+              navigate("/login");
+            });
           }}
         >
           Đăng xuất

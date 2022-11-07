@@ -1,42 +1,53 @@
-import React, { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import "antd/dist/antd.css";
 import "./App.css";
 import {
   BrowserRouter,
   Route,
   Routes,
-  useNavigate,
   redirect,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
 import { privateRoutes, publicRoutes } from "./routers";
 import DefaultLayout from "./routers/components/DefaultLayout";
 
 import { useAppSelector } from "./hooks";
-import { getAuth } from "firebase/auth";
-const getAllCookies = () =>
-  document.cookie
-    .split(";")
-    .reduce(
-      (ac, str) =>
-        Object.assign(ac, { [str.split("=")[0].trim()]: str.split("=")[1] }),
-      {}
-    );
-function App() {
-  const token = useAppSelector((state) => state.profile.token);
+import { auth } from "./firebase/config";
+import { ObjectType } from "typescript";
 
-  console.log(getAllCookies());
-  if (token) {
-    redirect("/");
-  } else {
-    redirect("/login");
-  }
-  useEffect(() => {}, []);
+function App() {
+  const AllCookies = document.cookie.split(";").reduce(
+    (ac, str) =>
+      Object.assign(ac, {
+        [str.split("=")[0].trim().toString()]: str.split("=")[1],
+      }),
+    {}
+  );
+  let token = useAppSelector((state) => state.profile.token);
+  const [user, setUser] = useState("");
+  // useEffect(() => {
+  //   const unsubrice = auth.onAuthStateChanged((userLogin) => {
+  //     if (userLogin) {
+  //       setUser(userLogin.refreshToken);
+  //       redirect("/");
+  //     } else {
+  //       setUser("");
+  //       redirect("/login");
+  //     }
+  //   });
+  //   return unsubrice;
+  // }, []);
+  const accessToken = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("accessToken"))
+    ?.split("=")[1];
+
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          {!token ? (
+          {!accessToken ? (
             <>
               {publicRoutes?.map((value) => {
                 let Layout = Fragment;

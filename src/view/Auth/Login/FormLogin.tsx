@@ -4,8 +4,12 @@ import { Button, Form, Input } from "antd";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../../firebase/config";
-import { setToken } from "../../../modules/authentication/profileStore";
+import {
+  setToken,
+  updateProfileInStore,
+} from "../../../modules/authentication/profileStore";
 import { useAppDispatch } from "../../../hooks";
+import { getProfile } from "../../../modules/authentication/repository";
 type LoginStatus = "pending" | "fulfill" | "reject" | undefined;
 export default React.memo(function FormLogin() {
   const navigate = useNavigate();
@@ -34,6 +38,9 @@ export default React.memo(function FormLogin() {
           .catch((error) => {
             setLoginStatus("reject");
           });
+        getProfile("iswFzKlZkLdTaJvJNEib").then((user) => {
+          dispatch(updateProfileInStore({ user }));
+        });
       })
       .catch(() => {
         setLoginStatus("reject");

@@ -8,32 +8,34 @@ import { Badge, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React, { ReactElement, ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../../../../hooks";
 
 interface DataType {
   id: string;
-  name: string;
-  ipAddress: string;
+  deviceId: string;
+  deviceName: string;
+  deviceIp: string;
   statusActive: string;
   statusConect: string;
-  serviceUse: string;
+  deviceService: string;
 }
 
 const columns: ColumnsType<DataType> = [
   {
     title: "Mã thiết bị",
-    dataIndex: "id",
-    key: "id",
+    dataIndex: "deviceId",
+    key: "deviceId",
     render: (text) => <a>{text}</a>,
   },
   {
     title: "Tên thiết bị",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: "deviceName",
+    key: "deviceName",
   },
   {
     title: "Địa chỉ IP",
-    dataIndex: "ipAddress",
-    key: "ipAddress",
+    dataIndex: "deviceIp",
+    key: "deviceIp",
   },
   {
     title: "Trạng thái hoạt động",
@@ -66,8 +68,8 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: "Dịch vụ sử dụng",
-    key: "serviceUse",
-    render: (_, record) => (
+    key: "deviceService",
+    render: (_, { deviceService }) => (
       <div
         style={{
           display: "flex",
@@ -75,7 +77,7 @@ const columns: ColumnsType<DataType> = [
           margin: "0px 160px 0px 16px",
         }}
       >
-        <span>Khám tim mạch</span>
+        <span>{deviceService}</span>
         <div
           style={{
             display: "flex",
@@ -91,8 +93,9 @@ const columns: ColumnsType<DataType> = [
   },
   {
     key: "detail",
-    render: (_, record) => (
-      <div
+    render: (_, { id }) => (
+      <Link
+        to={`/device/detail/${id}`}
         style={{
           display: "flex",
           justifyContent: "center",
@@ -101,14 +104,14 @@ const columns: ColumnsType<DataType> = [
         }}
       >
         Chi tiết
-      </div>
+      </Link>
     ),
   },
   {
     key: "update",
-    render: (_, record) => (
+    render: (_, { id }) => (
       <Link
-        to={"/device/update"}
+        to={`/device/update/${id}`}
         style={{
           display: "flex",
           justifyContent: "center",
@@ -122,7 +125,7 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const data: DataType[] = [
+let data: DataType[] | any = [
   {
     id: "KOI_01",
     name: "Kiosk",
@@ -226,6 +229,8 @@ const itemRender = (_: any, type: string, originalElement: ReactNode) => {
   return originalElement;
 };
 export default function TableDevice() {
+  const devices = useAppSelector((state) => state.device.devices);
+  data = devices;
   return (
     <Table
       className="table__device"
