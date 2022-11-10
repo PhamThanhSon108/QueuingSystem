@@ -15,6 +15,7 @@ import DefaultLayout from "./routers/components/DefaultLayout";
 import { useAppSelector } from "./hooks";
 import { auth } from "./firebase/config";
 import { ObjectType } from "typescript";
+import { v4 } from "uuid";
 
 function App() {
   const AllCookies = document.cookie.split(";").reduce(
@@ -53,12 +54,17 @@ function App() {
                 let Layout = Fragment;
                 return (
                   <Route
+                    key={v4()}
                     element={<Layout>{value?.component}</Layout>}
                     path={value?.path}
                   >
                     {value?.children
                       ? value?.children.map((item) => (
-                          <Route path={item.path} element={item.component} />
+                          <Route
+                            key={v4()}
+                            path={item.path}
+                            element={item.component}
+                          />
                         ))
                       : null}
                   </Route>
@@ -73,6 +79,7 @@ function App() {
 
                 return (
                   <Route
+                    key={v4()}
                     element={
                       <Layout dashboard={value.path === "/"}>
                         {value?.component}
@@ -82,7 +89,11 @@ function App() {
                   >
                     {value?.children
                       ? value?.children.map((item) => (
-                          <Route path={item.path} element={item.component} />
+                          <Route
+                            key={v4()}
+                            path={item.path}
+                            element={item.component}
+                          />
                         ))
                       : null}
                   </Route>

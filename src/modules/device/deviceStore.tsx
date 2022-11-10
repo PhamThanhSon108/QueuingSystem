@@ -47,6 +47,7 @@ export const deviceStore = createSlice({
         devices: object[] | any;
       }>
     ) => Object.assign(state, { devices: action.payload.devices }),
+
     // fetchDevices: (
     //   state,
     //   action: PayloadAction<{ devices: Array<object | undefined> }>

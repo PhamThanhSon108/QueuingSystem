@@ -5,6 +5,7 @@ import "./AddDevice.scss";
 import { useAppSelector } from "../../../hooks";
 import { updateDevice } from "../../../modules/device/respository";
 import { Option } from "antd/lib/mentions";
+import { v4 } from "uuid";
 const DeviceTypeOption = ["Kiosk", "Display counter"];
 const labelFormDevice = {
   deviceId: {
@@ -29,7 +30,7 @@ const labelFormDevice = {
     label: "Dịch vụ sử dụng",
   },
 };
-const DeviceServiceOption = [
+let DeviceServiceOption = [
   "Khám tim mạch",
   "Khám sản phụ khoa",
   "Khám răng hàm mặt",
@@ -40,7 +41,6 @@ const DeviceServiceOption = [
 export default function UpdateDevice() {
   const [form] = Form.useForm();
   const { id } = useParams();
-  console.log(id, "id off update device");
   const navigate = useNavigate();
   const handleCancel = () => {
     navigate("/device");
@@ -50,9 +50,14 @@ export default function UpdateDevice() {
     return state.device.devices;
   });
   const device = devices?.find((value) => value.id == id);
+
+  const services: Array<any> | undefined = useAppSelector((state) => {
+    return state.service.services;
+  });
+
+  DeviceServiceOption = services.map((value) => value?.serviceName);
   const [loading, setLoading] = useState<boolean>(false);
   const handleUpdateDevice = (data: FormData) => {
-    console.log(data);
     if (id) {
       setLoading(true);
       updateDevice({ device: data, id: id }).then(() => {
@@ -166,7 +171,9 @@ export default function UpdateDevice() {
                   >
                     <Select>
                       {DeviceTypeOption.map((value) => (
-                        <Option value={value}>{value}</Option>
+                        <Option key={v4()} value={value}>
+                          {value}
+                        </Option>
                       ))}
                     </Select>
                   </Form.Item>
@@ -223,7 +230,9 @@ export default function UpdateDevice() {
                   >
                     <Select mode="multiple">
                       {DeviceServiceOption.map((value) => (
-                        <Option value={value}>{value}</Option>
+                        <Option key={v4()} value={value}>
+                          {value}
+                        </Option>
                       ))}
                     </Select>
                   </Form.Item>

@@ -52,7 +52,7 @@ export default function DefaultLayout({
           </>
         ) : (
           <>
-            <Layout className="body" style={{ width: "calc(100vw - 200px);" }}>
+            <Layout className="body" style={{ width: "calc(100vw - 200px)" }}>
               <Layout>
                 <Header
                   className="header"

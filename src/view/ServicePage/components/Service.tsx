@@ -1,33 +1,48 @@
 import { Col, Row, Select, Typography } from "antd";
-import { Option } from "antd/lib/mentions";
-
-import "../DevicePage.scss";
 import Search from "antd/lib/input/Search";
-import TableDevice from "./TableDevice";
-import { images } from "../../../assets/images";
+import { Option } from "antd/lib/mentions";
+import { DatePicker } from "antd";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getDevices } from "../../../modules/device/respository";
-import { useEffect } from "react";
-import { deviceStore } from "../../../modules/device/deviceStore";
+import { images } from "../../../assets/images";
+import TableDevice from "../../DevicePage/components/TableDevice";
+import type { Moment } from "moment";
+import ServiceTable from "./TableService/ServiceTable";
+import { getServices } from "../../../modules/service/respository";
 import { useAppDispatch } from "../../../hooks";
-type deviceProps = {
-  setStatus?: (value: string) => void;
-};
-export default function Device({ setStatus }: deviceProps) {
+import { serviceStore } from "../../../modules/service/serviceStore";
+const { RangePicker } = DatePicker;
+type RangeValue = [Moment | null, Moment | null] | null;
+export default function Service() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const handleAddDevice = () => {
-    navigate("add");
+  const [dates, setDates] = useState<RangeValue>(null);
+  const [value, setValue] = useState<RangeValue>(null);
+  const disabledDate = (current: Moment) => {
+    if (!dates) {
+      return false;
+    }
+    const tooLate = dates[0] && current.diff(dates[0], "days") > 50;
+    const tooEarly = dates[1] && dates[1].diff(current, "days") > 50;
+    return !!tooEarly || !!tooLate;
+  };
+
+  const onOpenChange = (open: boolean) => {
+    if (open) {
+      setDates([null, null]);
+    } else {
+      setDates(null);
+    }
   };
   useEffect(() => {
-    getDevices().then((deviceSnap) => {
-      dispatch(deviceStore.actions.fetchDevices({ devices: deviceSnap }));
+    getServices().then((serviceSnap) => {
+      dispatch(serviceStore.actions.fetchService({ services: serviceSnap }));
     });
   }, []);
   return (
     <div className="devicepage">
       <Row className="devicepage__title">
-        <Typography.Title>Biểu đồ cấp số</Typography.Title>
+        <Typography.Title>Quản lý dịch vụ</Typography.Title>
       </Row>
       <Row className="devicepage__filter">
         <Col span={22} style={{ display: "flex" }}>
@@ -56,15 +71,13 @@ export default function Device({ setStatus }: deviceProps) {
             >
               Trạng thái kết nối
             </Typography.Title>
-            <Select
-              suffixIcon={images.icon.arrow}
-              className="devicepage__filter-item-body"
-              defaultValue={"Tất cả"}
-            >
-              <Option value="">Tất cả</Option>
-              <Option value="1">Hoạt động</Option>
-              <Option value="2">Ngưng hoạt động</Option>
-            </Select>
+            <RangePicker
+              value={dates || value}
+              disabledDate={disabledDate}
+              onCalendarChange={(val) => setDates(val)}
+              onChange={(val) => setValue(val)}
+              onOpenChange={onOpenChange}
+            />
           </div>
           <div className="devicepage__filter-last-item">
             <div className="devicepage__filter-item">
@@ -85,7 +98,7 @@ export default function Device({ setStatus }: deviceProps) {
       </Row>
       <Row className="devicepage__body">
         <Col span={22} className="devicepage__body-table">
-          <TableDevice />
+          <ServiceTable />
         </Col>
         <Col span={2} className="devicepage__body-modify">
           <div className="devicepage__body-modify-container">
@@ -95,9 +108,8 @@ export default function Device({ setStatus }: deviceProps) {
             <Link
               to={"add"}
               className="devicepage__body-modify-container-label"
-              onClick={handleAddDevice}
             >
-              Thêm thiết bị
+              Thêm dịch vụ
             </Link>
           </div>
         </Col>

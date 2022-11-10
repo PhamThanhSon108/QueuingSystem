@@ -18,9 +18,9 @@ export default React.memo(function IconArrow({
       <path
         d="M6 9L12 15L18 9H6Z"
         stroke="currentcolor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

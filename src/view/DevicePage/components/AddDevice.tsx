@@ -1,10 +1,10 @@
 import { Button, Col, Form, Input, Row, Select, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { addDevice } from "../../../modules/device/respository";
 import "./AddDevice.scss";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4, v4 } from "uuid";
 import { Option } from "antd/lib/mentions";
 const labelFormDevice = {
   deviceId: {
@@ -30,7 +30,7 @@ const labelFormDevice = {
   },
 };
 const DeviceTypeOption = ["Kiosk", "Display counter"];
-const DeviceServiceOption = [
+let DeviceServiceOption = [
   "Khám tim mạch",
   "Khám sản phụ khoa",
   "Khám răng hàm mặt",
@@ -46,6 +46,10 @@ export default function AddDevice({ setStatus }: deviceProps) {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
+  const services: Array<any> | undefined = useAppSelector((state) => {
+    return state.service.services;
+  });
+  DeviceServiceOption = services.map((value) => value?.serviceName);
   const handleCancel = () => {
     navigate("/device");
   };
@@ -55,6 +59,7 @@ export default function AddDevice({ setStatus }: deviceProps) {
       navigate("/device");
     });
   };
+
   return (
     <div className="devicepage">
       <Row className="devicepage__title">
@@ -158,7 +163,9 @@ export default function AddDevice({ setStatus }: deviceProps) {
                     /> */}
                     <Select>
                       {DeviceTypeOption.map((value) => (
-                        <Option value={value}>{value}</Option>
+                        <Option key={v4()} value={value}>
+                          {value}
+                        </Option>
                       ))}
                     </Select>
                   </Form.Item>
@@ -227,7 +234,9 @@ export default function AddDevice({ setStatus }: deviceProps) {
                       style={{ height: "44px !important" }}
                     >
                       {DeviceServiceOption.map((value) => (
-                        <Option value={value}>{value}</Option>
+                        <Option key={v4()} value={value}>
+                          {value}
+                        </Option>
                       ))}
                     </Select>
                   </Form.Item>

@@ -10,6 +10,10 @@ import Device from "../view/DevicePage/components/Device";
 import UpdateDevice from "../view/DevicePage/components/UpdateDevice";
 import Homepage from "../view/Homepage";
 import ServicePage from "../view/ServicePage";
+import AddService from "../view/ServicePage/components/AddService";
+import DetailService from "../view/ServicePage/components/DetailService";
+import Service from "../view/ServicePage/components/Service";
+import UpdateService from "../view/ServicePage/components/UpdateService";
 type routeType = {
   path: string;
   component: React.ReactElement;
@@ -28,7 +32,16 @@ export const privateRoutes: routeType[] = [
       { path: "detail/:id", component: <DetailDevice /> },
     ],
   },
-  { path: routes.service, component: <ServicePage /> },
+  {
+    path: routes.service,
+    component: <ServicePage />,
+    children: [
+      { path: "", component: <Service /> },
+      { path: "add", component: <AddService /> },
+      { path: "detail/:id", component: <DetailService /> },
+      { path: "update/:id", component: <UpdateService /> },
+    ],
+  },
   { path: routes.report, component: <>report </> },
   { path: routes.nums, component: <>nums </> },
   { path: routes.setting, component: <>Setting </> },

@@ -1,14 +1,12 @@
 import { Row, Typography } from "antd";
 import React from "react";
-
+import { Outlet } from "react-router-dom";
+import Service from "./components/Service";
+import "./Service.scss";
 export default function ServicePage() {
   return (
     <>
-      <Row>
-        <Typography.Title className="homepage__title">
-          Biểu đồ cấp số
-        </Typography.Title>
-      </Row>
+      <Outlet />
     </>
   );
 }
