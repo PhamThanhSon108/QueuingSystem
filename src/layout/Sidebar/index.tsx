@@ -30,12 +30,12 @@ const items: MenuItem[] = [
   getItem("Dashboard", "/", images.icon.dashboard),
   getItem("Thiết bị", "/device", images.icon.device),
   getItem("Dịch vụ", "/service", images.icon.service),
-  getItem("Cấp số", "/nums", images.icon.nums),
+  getItem("Cấp số", "/providenumbers", images.icon.nums),
   getItem("Báo cáo", "/report", images.icon.report),
   getItem(`Cài đặt hệ thống`, "/setting", images.icon.setting, [
-    getItem("Quản lý vai trò", "1"),
-    getItem("Quản lý tài khoản", "2"),
-    getItem("Nhật ký người dùng", "3"),
+    getItem("Quản lý vai trò", "/setting/role"),
+    getItem("Quản lý tài khoản", "/setting/account"),
+    getItem("Nhật ký người dùng", "/setting/userlog"),
   ]),
 ];
 export default function Sidebar() {

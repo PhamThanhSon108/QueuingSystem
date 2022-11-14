@@ -1,9 +1,10 @@
+import React from "react";
 import { Outlet } from "react-router-dom";
 
-export default function DevicePage() {
+export const RoleManagementPage = () => {
   return (
     <>
       <Outlet />
     </>
   );
-}
+};

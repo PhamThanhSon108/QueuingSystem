@@ -2,11 +2,11 @@ const routes = {
   home: "/",
   device: "/device",
   service: "/service",
-  nums: "/nums",
+  provideNumbers: "/providenumbers",
   report: "/report",
-  setting: "/setting",
-
-  //auth
+  settingRole: "/setting/role",
+  settingAccount: "/setting/account",
+  settingUserLog: "/setting/userlog", //auth
   login: "/login",
   reset: "/reset",
   profile: "/profile",

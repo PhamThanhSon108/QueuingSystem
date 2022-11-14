@@ -3,6 +3,7 @@ import IconArrow from "./icons/IconArrow";
 import IconBell from "./icons/IconBell";
 import IconDashBoard from "./icons/IconDashBoard";
 import IconDevice from "./icons/IconDevice";
+import { IconDownLoadFile } from "./icons/IconDownLoadFile";
 import IconLogout from "./icons/IconLogout";
 import IconNumericalOrder from "./icons/IconNumericalOrder";
 import IconNumericalorderSkiped from "./icons/IconNumericalorderSkiped";
@@ -32,6 +33,7 @@ export const images = {
     numericalorderskiped: <IconNumericalorderSkiped />,
     numericalorder: <IconNumericalOrder />,
     addDevice: <IconAddDevice />,
+    downLoadFile: <IconDownLoadFile />,
   },
   temp: {
     login: <ImageLogin />,
