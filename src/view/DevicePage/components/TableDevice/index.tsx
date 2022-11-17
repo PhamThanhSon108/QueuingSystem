@@ -8,7 +8,7 @@ import { Badge, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React, { ReactElement, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../../hooks";
 
 interface DataType {
   id: string;
@@ -231,6 +231,23 @@ const itemRender = (_: any, type: string, originalElement: ReactNode) => {
 export default function TableDevice() {
   const devices = useAppSelector((state) => state.device.devices);
   data = devices;
+  const dispatch = useAppDispatch();
+  const services: Array<any> | undefined = useAppSelector((state) => {
+    return state.service.services;
+  });
+  const DeviceServiceOption = services.reduce(
+    (serviceToShow: any, value: { id: string }) => {
+      Object.assign(serviceToShow, { [value.id]: value });
+      return serviceToShow;
+    },
+    {}
+  );
+  data = devices?.map((value: any) => ({
+    ...value,
+    deviceService: value?.deviceService?.map(
+      (item: any) => DeviceServiceOption[item]?.serviceName + " "
+    ),
+  }));
   return (
     <Table
       className="table__device"

@@ -30,7 +30,7 @@ const labelFormDevice = {
     label: "Dịch vụ sử dụng",
   },
 };
-let DeviceServiceOption = [
+let DeviceServiceOption: string[] | { name: string; id: string }[] = [
   "Khám tim mạch",
   "Khám sản phụ khoa",
   "Khám răng hàm mặt",
@@ -55,7 +55,10 @@ export default function UpdateDevice() {
     return state.service.services;
   });
 
-  DeviceServiceOption = services.map((value) => value?.serviceName);
+  DeviceServiceOption = services.map((value) => ({
+    name: value?.serviceName,
+    id: value?.id,
+  }));
   const [loading, setLoading] = useState<boolean>(false);
   const handleUpdateDevice = (data: FormData) => {
     if (id) {
@@ -230,8 +233,8 @@ export default function UpdateDevice() {
                   >
                     <Select mode="multiple">
                       {DeviceServiceOption.map((value) => (
-                        <Option key={v4()} value={value}>
-                          {value}
+                        <Option key={v4()} value={value.id}>
+                          {value.name}
                         </Option>
                       ))}
                     </Select>

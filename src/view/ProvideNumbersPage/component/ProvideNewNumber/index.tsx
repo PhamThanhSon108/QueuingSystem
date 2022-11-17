@@ -1,10 +1,13 @@
 import { Button, Col, Form, Row, Select, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import "../../../ServicePage/Service.scss";
-import { useAppDispatch } from "../../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../../hooks";
 import { Option } from "antd/lib/mentions";
 import { v4 } from "uuid";
 import { modalProvideNewNumber } from "./ModalProvideNewNumber";
+import { provideNumber } from "../../../../modules/provideNumbers/respository";
+import moment from "moment";
+import { formatDate } from "../TableProvideNumbers/TableProvideNumbers";
 
 const labelFormDevice = {
   serviceId: {
@@ -18,7 +21,7 @@ const labelFormDevice = {
   },
 };
 const DeviceTypeOption = ["Kiosk", "Display counter"];
-const DeviceServiceOption = [
+let DeviceServiceOption: string[] | { name: string; id: string }[] = [
   "Khám tim mạch",
   "Khám sản phụ khoa",
   "Khám răng hàm mặt",
@@ -42,8 +45,27 @@ export default function ProvideNewNumber() {
     // addService({ service: data, id: uuidv4() }).then(() => {
     //   navigate("/service");
     // });
-    modalProvideNewNumber();
+
+    provideNumber({ id: data.deviceService }).then((number: any) => {
+      if (number)
+        modalProvideNewNumber({
+          ordinalNumbers: number?.service?.option?.preFix
+            ? number?.ordinalNumbers + number?.service?.serviceId
+            : number?.service?.serviceId + number?.ordinalNumbers,
+          serviceName: number?.service?.serviceName,
+          createdTime: formatDate(number?.createdAt.seconds),
+          expiredTime: formatDate(number?.createdAt.seconds, true),
+        });
+    });
   };
+
+  const services: Array<any> | undefined = useAppSelector((state) => {
+    return state.service.services;
+  });
+  DeviceServiceOption = services.map((value) => ({
+    name: value?.serviceName,
+    id: value?.id,
+  }));
 
   return (
     <>
@@ -86,8 +108,8 @@ export default function ProvideNewNumber() {
                     >
                       <Select style={{ height: "44px !important" }}>
                         {DeviceServiceOption.map((value) => (
-                          <Option key={v4()} value={value}>
-                            {value}
+                          <Option key={v4()} value={value.id}>
+                            {value.name}
                           </Option>
                         ))}
                       </Select>
@@ -102,6 +124,7 @@ export default function ProvideNewNumber() {
                         className="confirm"
                         htmlType="submit"
                         form="addServiceForm"
+                        // onClick={handleProvide}
                       >
                         In số
                       </Button>

@@ -1,7 +1,6 @@
 import { Button, Input, Modal } from "antd";
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { changeTravel } from "../../redux/TravelSlice";
 import { TravelProps } from "../../type";
 
 const ChangeTravelModal = ({
@@ -25,7 +24,6 @@ const ChangeTravelModal = ({
       return;
     }
     if (title?.trim() && author?.trim()) {
-      dispatch(changeTravel({ id: Travel.id, title: title, author: author }));
       setTitle("");
       setAuthor("");
     }

@@ -1,7 +1,7 @@
 import { Button, Input, Modal } from "antd";
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { addNewTravels } from "../../redux/TravelSlice";
+
 import { v4 as uuidv4 } from "uuid";
 const AddTravelModal = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ const AddTravelModal = () => {
   const handleAddTravel = () => {
     if (title?.trim() && author?.trim()) {
       // dispatch(addNewTravel({ id: uuidv4(), title: title, author: author }));
-      dispatch(addNewTravels({ id: uuidv4(), title: title, author: author }));
+
       setTitle("");
       setAuthor("");
     }

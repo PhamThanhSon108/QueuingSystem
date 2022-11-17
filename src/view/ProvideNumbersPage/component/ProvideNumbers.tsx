@@ -10,8 +10,10 @@ import type { Moment } from "moment";
 
 import { getServices } from "../../../modules/service/respository";
 import { useAppDispatch } from "../../../hooks";
-import { serviceStore } from "../../../modules/service/serviceStore";
+
 import TableProvideNumbers from "./TableProvideNumbers/TableProvideNumbers";
+import { getProvideNumbers } from "../../../modules/provideNumbers/respository";
+import { provideNumbersStore } from "../../../modules/provideNumbers/provideNumbersStore";
 
 const { RangePicker } = DatePicker;
 type RangeValue = [Moment | null, Moment | null] | null;
@@ -37,8 +39,12 @@ export default function ProvideNumbers() {
     }
   };
   useEffect(() => {
-    getServices().then((serviceSnap) => {
-      dispatch(serviceStore.actions.fetchService({ services: serviceSnap }));
+    getProvideNumbers().then((number) => {
+      dispatch(
+        provideNumbersStore.actions.fetchprovideNumbers({
+          provideNumbers: number,
+        })
+      );
     });
   }, []);
   return (

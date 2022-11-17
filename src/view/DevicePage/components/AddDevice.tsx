@@ -30,7 +30,7 @@ const labelFormDevice = {
   },
 };
 const DeviceTypeOption = ["Kiosk", "Display counter"];
-let DeviceServiceOption = [
+let DeviceServiceOption: string[] | { name: string; id: string }[] = [
   "Khám tim mạch",
   "Khám sản phụ khoa",
   "Khám răng hàm mặt",
@@ -49,7 +49,10 @@ export default function AddDevice({ setStatus }: deviceProps) {
   const services: Array<any> | undefined = useAppSelector((state) => {
     return state.service.services;
   });
-  DeviceServiceOption = services.map((value) => value?.serviceName);
+  DeviceServiceOption = services.map((value) => ({
+    name: value?.serviceName,
+    id: value?.id,
+  }));
   const handleCancel = () => {
     navigate("/device");
   };
@@ -234,8 +237,8 @@ export default function AddDevice({ setStatus }: deviceProps) {
                       style={{ height: "44px !important" }}
                     >
                       {DeviceServiceOption.map((value) => (
-                        <Option key={v4()} value={value}>
-                          {value}
+                        <Option key={v4()} value={value.id}>
+                          {value.name}
                         </Option>
                       ))}
                     </Select>

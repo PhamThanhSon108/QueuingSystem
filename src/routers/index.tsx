@@ -3,7 +3,6 @@ import routes from "../config/routes";
 import ForgotPassword from "../view/Auth/ForgotPassword";
 import Login from "../view/Auth/Login";
 import Profile from "../view/Auth/Profile";
-
 import DevicePage from "../view/DevicePage";
 import AddDevice from "../view/DevicePage/components/AddDevice";
 import DetailDevice from "../view/DevicePage/components/DetailDevice";

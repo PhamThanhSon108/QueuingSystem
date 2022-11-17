@@ -1,34 +1,21 @@
-import { Button, Col, Form, Input, Row, Select, Typography } from "antd";
-import React from "react";
+import { Button, Checkbox, Col, Form, Input, Row, Typography } from "antd";
+import "../RoleManagement.scss";
+import TextArea from "antd/lib/input/TextArea";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4, v4 } from "uuid";
-import { Option } from "antd/lib/mentions";
-import { useAppDispatch, useAppSelector } from "../../../../hooks";
+import { useAppDispatch } from "../../../../hooks";
 const labelFormDevice = {
-  deviceId: {
-    label: "Mã thiết bị",
+  serviceId: {
+    label: "Mã dịch vụ",
   },
-  deviceName: {
-    label: "Tên thiết bị",
+  serviceName: {
+    label: "Tên dịch vụ",
   },
-  deviceIp: {
-    label: "Địa chỉ IP",
-  },
-  deviceType: {
-    label: "Loại thiết bị",
-  },
-  deviceNameToLogin: {
-    label: "Tên đăng nhập",
-  },
-  devicePassword: {
-    label: "Mật khẩu",
-  },
-  deviceService: {
-    label: "Dịch vụ sử dụng",
+  serviceDescription: {
+    label: "Mô tả",
   },
 };
 const DeviceTypeOption = ["Kiosk", "Display counter"];
-let DeviceServiceOption = [
+const DeviceServiceOption = [
   "Khám tim mạch",
   "Khám sản phụ khoa",
   "Khám răng hàm mặt",
@@ -44,35 +31,35 @@ export default function AddRole() {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const services: Array<any> | undefined = useAppSelector((state) => {
-    return state.service.services;
-  });
-  DeviceServiceOption = services.map((value) => value?.serviceName);
   const handleCancel = () => {
-    navigate("/device");
+    navigate("/service");
   };
   const handleAddDevice = () => {};
-  const handleOnfinish = (data: any) => {};
-
+  const handleOnfinish = (data: any) => {
+    data.surFix = !!data.surFix;
+    data.resetEveryday = !!data.resetEveryday;
+    data.autoIncrease = !!data.autoIncrease;
+    data.preFix = !!data.preFix;
+  };
   return (
-    <div className="devicepage">
-      <Row className="devicepage__title">
-        <Typography.Title>Quản lý thiết bị</Typography.Title>
+    <div className="wrap-page">
+      <Row className="page-title">
+        <Typography.Title>Danh sách vai trò</Typography.Title>
       </Row>
 
-      <Row className="wrap__add-device">
-        <div className="add-device__form">
+      <Row className="wrap-page__add">
+        <div>
           <Form
-            name="addDeviceForm"
+            name="addServiceForm"
             layout="vertical"
             form={form}
-            id="addDeviceForm"
+            id="addServiceForm"
             onFinish={handleOnfinish}
           >
             <Row>
               <div>
                 <Typography.Title level={4} className="add-device__form-title">
-                  Quản lý thiết bị
+                  Thông tin vai trò
                 </Typography.Title>
               </div>
             </Row>
@@ -80,8 +67,8 @@ export default function AddRole() {
               <Col style={{ marginRight: 24 }}>
                 <div className="main-form">
                   <Form.Item
-                    label={labelFormDevice.deviceId.label}
-                    name="deviceId"
+                    label={labelFormDevice.serviceId.label}
+                    name="serviceId"
                     rules={[
                       {
                         required: true,
@@ -98,8 +85,9 @@ export default function AddRole() {
                     />
                   </Form.Item>
                   <Form.Item
-                    label={labelFormDevice.deviceName.label}
-                    name="deviceName"
+                    label={labelFormDevice.serviceDescription.label}
+                    name="serviceDescription"
+                    style={{ height: "100%" }}
                     rules={[
                       {
                         required: true,
@@ -110,133 +98,131 @@ export default function AddRole() {
                       },
                     ]}
                   >
-                    <Input
+                    <TextArea
+                      style={{ height: 145 }}
                       // placeholder={formatMessage('accounts.userName')}
                       maxLength={100}
                     />
                   </Form.Item>
-                  <Form.Item
-                    label={labelFormDevice.deviceIp.label}
-                    name="deviceIp"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                      {
-                        max: 99,
-                        whitespace: true,
-                      },
-                    ]}
-                  >
-                    <Input maxLength={100} />
-                  </Form.Item>
+                  <span style={{ textAlign: "start" }}>
+                    <span style={{ color: "red", marginRight: "5px" }}>*</span>
+                    Là trường thông tin bắt buộc
+                  </span>
                 </div>
               </Col>
 
               <Col>
                 <div className="main-form">
-                  <Form.Item
-                    label={labelFormDevice.deviceType.label}
-                    name="deviceType"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                      {
-                        max: 99,
-                        whitespace: true,
-                      },
-                    ]}
-                  >
-                    {/* <Input
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    /> */}
-                    <Select>
-                      {DeviceTypeOption.map((value) => (
-                        <Option key={v4()} value={value}>
-                          {value}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  <Form.Item
-                    label={labelFormDevice.deviceNameToLogin.label}
-                    name="deviceNameToLogin"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                      {
-                        max: 99,
-                        whitespace: true,
-                      },
-                    ]}
-                  >
-                    <Input
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label={labelFormDevice.devicePassword.label}
-                    name="devicePassword"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                      {
-                        max: 99,
-                        whitespace: true,
-                      },
-                    ]}
-                  >
-                    <Input
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
-                  </Form.Item>
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <div className="main-form">
-                  <Form.Item
-                    label={labelFormDevice.deviceService.label}
-                    name="deviceService"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                      // {
-                      //   max: 99,
-                      //   whitespace: true,
-                      // },
-                    ]}
-                  >
-                    {/* <Input
-                      style={{ width: "100%" }}
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    /> */}
-                    <Select
-                      mode="multiple"
-                      style={{ height: "44px !important" }}
+                  <div>
+                    <Typography.Title
+                      level={4}
+                      className="role-function-decentralization-title"
                     >
-                      {DeviceServiceOption.map((value) => (
-                        <Option key={v4()} value={value}>
-                          {value}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
+                      Phân quyền chức năng
+                    </Typography.Title>
+
+                    <div className="role-function-decentralization-wrap">
+                      <div className="role-function-decentralization-item">
+                        <h4 className="role-function-decentralization-item-title">
+                          Chức năng 01
+                        </h4>
+                        <Form.Item
+                          valuePropName="checked"
+                          name="autoIncrease"
+                          rules={[]}
+                        >
+                          <Checkbox>
+                            <div>Tất cả</div>
+                          </Checkbox>
+                        </Form.Item>
+                        <Form.Item
+                          valuePropName="checked"
+                          name="autoIncrease"
+                          rules={[]}
+                        >
+                          <Checkbox>
+                            <div>Chức năng x</div>
+                          </Checkbox>
+                        </Form.Item>
+                        <Form.Item
+                          valuePropName="checked"
+                          name="autoIncrease"
+                          rules={[]}
+                        >
+                          <Checkbox>
+                            <div>Chức năng y</div>
+                          </Checkbox>
+                        </Form.Item>
+                      </div>
+
+                      <div className="role-function-decentralization-item">
+                        <h4 className="role-function-decentralization-item-title">
+                          Chức năng 01
+                        </h4>
+                        <Form.Item
+                          valuePropName="checked"
+                          name="autoIncrease"
+                          rules={[]}
+                        >
+                          <Checkbox>
+                            <div>Tất cả</div>
+                          </Checkbox>
+                        </Form.Item>
+                        <Form.Item
+                          valuePropName="checked"
+                          name="autoIncrease"
+                          rules={[]}
+                        >
+                          <Checkbox>
+                            <div>Chức năng x</div>
+                          </Checkbox>
+                        </Form.Item>
+                        <Form.Item
+                          valuePropName="checked"
+                          name="autoIncrease"
+                          rules={[]}
+                        >
+                          <Checkbox>
+                            <div>Chức năng y</div>
+                          </Checkbox>
+                        </Form.Item>
+                      </div>
+                      <div className="role-function-decentralization-item">
+                        <h4 className="role-function-decentralization-item-title">
+                          Chức năng 01
+                        </h4>
+                        <Form.Item
+                          valuePropName="checked"
+                          name="autoIncrease"
+                          rules={[]}
+                        >
+                          <Checkbox>
+                            <div>Tất cả</div>
+                          </Checkbox>
+                        </Form.Item>
+                        <Form.Item
+                          valuePropName="checked"
+                          name="autoIncrease"
+                          rules={[]}
+                        >
+                          <Checkbox>
+                            <div>Chức năng x</div>
+                          </Checkbox>
+                        </Form.Item>
+                        <Form.Item
+                          valuePropName="checked"
+                          name="autoIncrease"
+                          rules={[]}
+                        >
+                          <Checkbox>
+                            <div>Chức năng y</div>
+                          </Checkbox>
+                        </Form.Item>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </Col>
-              <span style={{ textAlign: "start" }}>
-                <span style={{ color: "red", marginRight: "5px" }}>*</span>
-                Là trường thông tin bắt buộc
-              </span>
             </Row>
           </Form>
         </div>
@@ -247,8 +233,8 @@ export default function AddRole() {
           <Button className="cancel" onClick={handleCancel}>
             Hủy bỏ
           </Button>
-          <Button className="confirm" htmlType="submit" form="addDeviceForm">
-            Thêm thiết bị
+          <Button className="confirm" htmlType="submit" form="addServiceForm">
+            Thêm dịch vụ
           </Button>
         </div>
       </Row>
