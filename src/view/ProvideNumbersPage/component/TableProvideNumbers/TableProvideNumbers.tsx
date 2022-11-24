@@ -74,7 +74,7 @@ const columns: ColumnsType<DataType> = [
     key: "detail",
     render: (_, { id }) => (
       <Link
-        to={`/device/detail/${id}`}
+        to={`/device/providenumbers/${id}`}
         style={{
           display: "flex",
           justifyContent: "center",

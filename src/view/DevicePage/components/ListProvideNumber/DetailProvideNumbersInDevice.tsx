@@ -2,41 +2,77 @@ import { Col, Input, Pagination, Row, Select, Typography, Form } from "antd";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
 import { images } from "../../../../assets/images";
+import { useEffect, useState } from "react";
+import { getDetailProvideNumberOfDevice } from "../../../../modules/device/respository";
+import { formatDate } from "../../../ProvideNumbersPage/component/TableProvideNumbers/TableProvideNumbers";
 
-const labelFormDevice = {
-  deviceId: {
-    label: "Mã thiết bị",
+const labelDetailProvideNumbers = {
+  customerName: {
+    label: "Họ và tên",
   },
-  deviceName: {
-    label: "Tên thiết bị",
+  customerPhoneNumber: {
+    label: "Số điện thoại",
   },
-  deviceIp: {
-    label: "Địa chỉ IP",
+  customerEmail: {
+    label: "Địa chỉ Email",
   },
-  deviceType: {
-    label: "Loại thiết bị",
+  serviceName: {
+    label: "Tên dịch vụ",
   },
-  deviceNameToLogin: {
-    label: "Tên đăng nhập",
+  ordinalNumbers: {
+    label: "Số thứ tự",
   },
-  devicePassword: {
-    label: "Mật khẩu",
+  createdTime: {
+    label: "Thời gian cấp",
   },
-  deviceService: {
-    label: "Dịch vụ sử dụng",
+  expiredTime: {
+    label: "Hạn sử dụng",
+  },
+  provideSource: {
+    label: "Nguồn cấp",
+  },
+  statusCreateNumbers: {
+    label: "Trạng thái",
   },
 };
 export default function DetailProvideNumbersInDevice() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.profile.user);
   const handleAddDevice = () => {
     navigate("add");
   };
   const { id } = useParams();
-  const devices: Array<any> | undefined = useAppSelector((state) => {
-    return state.device.devices;
-  });
-  const device = devices?.find((value) => value.id == id);
+  const [number, setNumber] = useState<
+    | {
+        id: string;
+        ordinalNumbers: string;
+        customerName: string;
+        serviceName: string;
+        createdTime: string;
+        expiredTime: string;
+        statusCreateNumbers: string;
+        supplySource: string;
+      }
+    | undefined
+  >();
+  useEffect(() => {
+    getDetailProvideNumberOfDevice({ id }).then((numberProvide) => {
+      console.log(numberProvide, "number");
+      setNumber({
+        id: numberProvide?.id,
+        ordinalNumbers: numberProvide?.service?.option?.preFix
+          ? numberProvide?.ordinalNumbers + numberProvide?.service?.serviceId
+          : numberProvide?.service?.serviceId + numberProvide?.ordinalNumbers,
+        customerName: numberProvide?.customerName,
+        serviceName: numberProvide?.service?.serviceName,
+        createdTime: formatDate(numberProvide?.createdAt.seconds),
+        expiredTime: formatDate(numberProvide?.createdAt.seconds, true),
+        statusCreateNumbers: "waiting",
+        supplySource: numberProvide?.device?.deviceName,
+      });
+    });
+  }, []);
   return (
     <div className="devicepage">
       <Row className="devicepage__title">
@@ -48,37 +84,47 @@ export default function DetailProvideNumbersInDevice() {
           <Row className="detail__page-wrap">
             <div className={"detail__page-list"}>
               <div>
-                <span>{labelFormDevice.deviceId.label}</span>
-                <span>{device?.deviceId}</span>
+                <span>{labelDetailProvideNumbers.customerName?.label}</span>
+                <span>{number?.customerName}</span>
               </div>
               <div>
-                <span>{labelFormDevice.deviceName.label}</span>
-                <span>{device?.deviceName}</span>
+                <span>{labelDetailProvideNumbers.serviceName?.label}</span>
+                <span>{number?.serviceName}</span>
               </div>
               <div>
-                <span>{labelFormDevice.deviceIp.label}</span>
-                <span>{device?.deviceIp}</span>
+                <span>{labelDetailProvideNumbers.ordinalNumbers?.label}</span>
+                <span>{number?.ordinalNumbers}</span>
+              </div>
+              <div>
+                <span>{labelDetailProvideNumbers.createdTime?.label}</span>
+                <span>{number?.createdTime}</span>
+              </div>
+              <div>
+                <span>{labelDetailProvideNumbers.expiredTime?.label}</span>
+                <span>{number?.expiredTime}</span>
               </div>
             </div>
             <div className={"detail__page-list"}>
               <div>
-                <span>{labelFormDevice.deviceType.label}</span>
-                <span>{device?.deviceType}</span>
+                <span>{labelDetailProvideNumbers.provideSource?.label}</span>
+                <span>{number?.supplySource}</span>
               </div>
               <div>
-                <span>{labelFormDevice.deviceNameToLogin.label}</span>
-                <span>{device?.deviceNameToLogin}</span>
+                <span>
+                  {labelDetailProvideNumbers.statusCreateNumbers?.label}
+                </span>
+                <span>{number?.statusCreateNumbers}</span>
               </div>
               <div>
-                <span>{labelFormDevice.devicePassword.label}</span>
-                <span>{device?.devicePassword}</span>
+                <span>
+                  {labelDetailProvideNumbers.customerPhoneNumber?.label}
+                </span>
+                <span>0972513822</span>
               </div>
-            </div>
-          </Row>
-          <Row>
-            <div className="detail__page-list-length">
-              <div>{labelFormDevice.deviceService.label}</div>
-              <span>{device?.deviceService}</span>
+              <div>
+                <span>{labelDetailProvideNumbers.customerEmail?.label}</span>
+                <span>Phạm Thanh Sơn</span>
+              </div>
             </div>
           </Row>
         </Col>

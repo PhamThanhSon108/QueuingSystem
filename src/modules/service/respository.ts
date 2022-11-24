@@ -1,6 +1,13 @@
 import { async } from "@firebase/util";
-import { query } from "express";
-import { collection, doc, getDocs, setDoc, where } from "firebase/firestore";
+
+import {
+  collection,
+  doc,
+  getDocs,
+  setDoc,
+  where,
+  query,
+} from "firebase/firestore";
 import { db } from "../../firebase/config";
 export const getServices = async () => {
   let services: Array<undefined | object> = [];
@@ -33,4 +40,23 @@ export const updateService = async ({
   id: string;
 }) => {
   return setDoc(doc(db, "services", id), { ...service, id });
+};
+
+export const getNumbersProvidedbyService = async ({
+  id,
+}: {
+  id: string | undefined;
+}) => {
+  let numbers: Array<undefined | object> = [];
+  const provideNumbersCollection = query(
+    collection(db, "provideNumbers"),
+    where("service.id", "==", id)
+  );
+
+  const querySnapshot = await getDocs(provideNumbersCollection);
+  querySnapshot.forEach((doc) => {
+    numbers.push(doc.data());
+  });
+  console.log(numbers, ["numbers"]);
+  return numbers;
 };

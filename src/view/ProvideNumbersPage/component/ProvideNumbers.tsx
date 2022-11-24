@@ -9,7 +9,7 @@ import { images } from "../../../assets/images";
 import type { Moment } from "moment";
 
 import { getServices } from "../../../modules/service/respository";
-import { useAppDispatch } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 
 import TableProvideNumbers from "./TableProvideNumbers/TableProvideNumbers";
 import { getProvideNumbers } from "../../../modules/provideNumbers/respository";
@@ -20,6 +20,10 @@ type RangeValue = [Moment | null, Moment | null] | null;
 export default function ProvideNumbers() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const numbers = useAppSelector(
+    (state) => state.provideNumbers.provideNumbers
+  );
   const [dates, setDates] = useState<RangeValue>(null);
   const [value, setValue] = useState<RangeValue>(null);
   const disabledDate = (current: Moment) => {
@@ -39,13 +43,14 @@ export default function ProvideNumbers() {
     }
   };
   useEffect(() => {
-    getProvideNumbers().then((number) => {
-      dispatch(
-        provideNumbersStore.actions.fetchprovideNumbers({
-          provideNumbers: number,
-        })
-      );
-    });
+    if (!numbers)
+      getProvideNumbers().then((number) => {
+        dispatch(
+          provideNumbersStore.actions.fetchprovideNumbers({
+            provideNumbers: number,
+          })
+        );
+      });
   }, []);
   return (
     <div className="devicepage">

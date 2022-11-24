@@ -1,9 +1,12 @@
 import Icon, { HomeOutlined } from "@ant-design/icons";
 import type { CustomIconComponentProps } from "@ant-design/icons/lib/components/Icon";
 import { Avatar, Popover, Typography } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { images } from "../../assets/images";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { updateProfileInStore } from "../../modules/authentication/profileStore";
+import { getProfile } from "../../modules/authentication/repository";
 import "./Header.scss";
 const contentAnnoun = () => {
   return (
@@ -130,6 +133,15 @@ export default function UserHeader() {
   const handleGotoProfile = () => {
     navigate("/profile");
   };
+  const dispatch = useAppDispatch();
+  const user: any = useAppSelector((state) => state.profile.user);
+  console.log(user, "user name");
+  useEffect(() => {
+    if (!user)
+      getProfile().then((user) => {
+        dispatch(updateProfileInStore({ user }));
+      });
+  }, []);
   return (
     <>
       <div
@@ -148,7 +160,7 @@ export default function UserHeader() {
         <span onClick={handleGotoProfile} className="userinfor">
           <Typography className="userinfor__wrapper">
             <div className="welcome">Xin chào</div>
-            <div className="name">Phạm Thanh Sơn</div>
+            <div className="name">{user?.userFullname}</div>
           </Typography>
         </span>
       </div>

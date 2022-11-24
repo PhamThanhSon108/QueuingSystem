@@ -106,7 +106,10 @@ export default function ProvideNewNumber() {
                         },
                       ]}
                     >
-                      <Select style={{ height: "44px !important" }}>
+                      <Select
+                        placeholder={"Chọn dịch vụ"}
+                        style={{ height: "44px !important" }}
+                      >
                         {DeviceServiceOption.map((value) => (
                           <Option key={v4()} value={value.id}>
                             {value.name}

@@ -2,6 +2,7 @@ import { ArrowDownOutlined } from "@ant-design/icons";
 import Icon from "@ant-design/icons/lib/components/AntdIcon";
 import { Badge, Card, Col, Row, Space, Typography } from "antd";
 import { images } from "../../assets/images";
+import { useAppSelector } from "../../hooks";
 
 import CalendarOverview from "./Calendar/CalendarOverview";
 import RadialChart from "./Chart/RadialChart";
@@ -9,6 +10,10 @@ import RadialChart from "./Chart/RadialChart";
 import "./Homepage.scss";
 
 export default function Overview() {
+  const devices = useAppSelector((state) => state.device.devices);
+  // for(let i = 0; i < devices?.length; i++) {
+
+  // }
   return (
     <div
       className="homepage__wrap"
@@ -24,7 +29,9 @@ export default function Overview() {
           <RadialChart />
         </div>
         <Col span={7} className={"homepage__overview-chart-total"}>
-          <span className="homepage__overview-chart-total-num">4.221</span>
+          <span className="homepage__overview-chart-total-num">
+            {devices?.length}
+          </span>
           <div className="homepage__overview-chart-total-title orange">
             {images.icon.device}
             <span>Thiết bị</span>

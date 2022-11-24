@@ -1,11 +1,43 @@
 import { ArrowDownOutlined } from "@ant-design/icons";
 import { Col, Row, Select, Tag, Typography } from "antd";
 import { Option } from "antd/lib/mentions";
+import { useEffect } from "react";
 import { images } from "../../assets/images";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { deviceStore } from "../../modules/device/deviceStore";
+import { getDevices } from "../../modules/device/respository";
+import { provideNumbersStore } from "../../modules/provideNumbers/provideNumbersStore";
+import { getProvideNumbers } from "../../modules/provideNumbers/respository";
+import { getServices } from "../../modules/service/respository";
+import { serviceStore } from "../../modules/service/serviceStore";
 import Chart from "./Chart";
 import "./Homepage.scss";
 
 export default function Homepage() {
+  const dispatch = useAppDispatch();
+  const devices = useAppSelector((state) => state.device.devices);
+  const services = useAppSelector((state) => state.service.services);
+  const numbers = useAppSelector(
+    (state) => state.provideNumbers.provideNumbers
+  );
+  useEffect(() => {
+    if (!devices)
+      getDevices().then((deviceSnap) => {
+        dispatch(deviceStore.actions.fetchDevices({ devices: deviceSnap }));
+      });
+    if (!services)
+      getServices().then((serviceSnap) => {
+        dispatch(serviceStore.actions.fetchService({ services: serviceSnap }));
+      });
+    if (!numbers)
+      getProvideNumbers().then((number) => {
+        dispatch(
+          provideNumbersStore.actions.fetchprovideNumbers({
+            provideNumbers: number,
+          })
+        );
+      });
+  }, []);
   return (
     <>
       <div className="homepage__wrap">

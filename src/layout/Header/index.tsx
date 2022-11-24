@@ -13,6 +13,7 @@ export default function HeaderLayout() {
         add: { path: "add", label: "Thêm thiết bị" },
         update: { path: "update", label: "Câp nhật thiết bị" },
         detail: { path: "detail", label: "Chi tiết thiết bị" },
+        providenumbers: { path: "providenumbers", label: "Danh sách cấp số" },
       },
     },
     service: {

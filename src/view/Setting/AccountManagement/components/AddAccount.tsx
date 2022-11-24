@@ -1,10 +1,21 @@
-import { Button, Col, Form, Input, Row, Select, Typography } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  notification,
+  Row,
+  Select,
+  Typography,
+} from "antd";
 
 import { useNavigate } from "react-router-dom";
 
 import { v4 as uuidv4, v4 } from "uuid";
 import { Option } from "antd/lib/mentions";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
+import { useEffect } from "react";
+import { addAccount } from "../../../../modules/setting/AccountManagement/respository";
 const labelFormAccount = {
   userFullname: {
     label: "Họ tên",
@@ -32,15 +43,17 @@ const labelFormAccount = {
   },
 };
 const DeviceTypeOption = ["Kiosk", "Display counter"];
-let DeviceServiceOption = [
-  "Khám tim mạch",
-  "Khám sản phụ khoa",
-  "Khám răng hàm mặt",
-  "Khám tai mũi họng",
-  "Khám hô hấp",
-  "Khám tổng quát",
-];
-
+let RoleOption = ["Kế toán", "Bác sĩ", "Lễ tân", "Quản lý", "Admin"];
+type profileType = {
+  confirmPassword: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  role: string[];
+  status: string;
+  userFullname: string;
+  userName: string;
+};
 export default function AddAccount() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -49,13 +62,28 @@ export default function AddAccount() {
   const services: Array<any> | undefined = useAppSelector((state) => {
     return state.service.services;
   });
-  DeviceServiceOption = services.map((value) => value?.serviceName);
+  // DeviceServiceOption = services.map((value) => value?.serviceName);
   const handleCancel = () => {
     navigate("/setting/account");
   };
-  const handleAddDevice = () => {};
-  const handleOnfinish = (data: any) => {
-    navigate("/setting/account");
+  const handleOnfinish = (data: profileType) => {
+    // navigate("/setting/account");
+    if (data.confirmPassword !== data.password) {
+      notification.error({
+        message: "Lỗi",
+        description: "Nhập lại mật khẩu không hợp lệ",
+      });
+    }
+    addAccount({ profile: data })
+      .then((a) => {
+        notification.success({
+          message: "Thành công",
+          description: "Thêm tài khoản thành công",
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -152,15 +180,16 @@ export default function AddAccount() {
                       // placeholder={formatMessage('accounts.userName')}
                       maxLength={100}
                     /> */}
-                    <Select
-                      mode="multiple"
-                      style={{ height: "44px !important" }}
-                    >
-                      {DeviceServiceOption.map((value) => (
-                        <Option key={v4()} value={value}>
-                          {value}
-                        </Option>
-                      ))}
+                    <Select style={{ height: "44px !important" }}>
+                      {RoleOption.map((value) => {
+                        console.log(value);
+
+                        return (
+                          <Option key={v4()} value={value}>
+                            {value}
+                          </Option>
+                        );
+                      })}
                     </Select>
                   </Form.Item>
                 </div>
@@ -235,16 +264,20 @@ export default function AddAccount() {
                       {
                         required: true,
                       },
-                      {
-                        max: 99,
-                        whitespace: true,
-                      },
                     ]}
                   >
-                    <Input
+                    {/* <Input
                       // placeholder={formatMessage('accounts.userName')}
                       maxLength={100}
-                    />
+                    /> */}
+                    <Select style={{ height: "44px !important" }}>
+                      <Option key={v4()} value={"active"}>
+                        Hoạt động
+                      </Option>
+                      <Option key={v4()} value={"inactive"}>
+                        Ngưng hoạt động
+                      </Option>
+                    </Select>
                   </Form.Item>
                 </div>
               </Col>

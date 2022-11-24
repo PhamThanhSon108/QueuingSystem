@@ -16,94 +16,90 @@ import { useAppSelector } from "./hooks";
 import { auth } from "./firebase/config";
 import { ObjectType } from "typescript";
 import { v4 } from "uuid";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import PrivateRoute from "./routers/PrivateRoute";
 
 function App() {
-  const AllCookies = document.cookie.split(";").reduce(
-    (ac, str) =>
-      Object.assign(ac, {
-        [str.split("=")[0].trim().toString()]: str.split("=")[1],
-      }),
-    {}
-  );
-  let token = useAppSelector((state) => state.profile.token);
-  const [user, setUser] = useState("");
-  // useEffect(() => {
-  //   const unsubrice = auth.onAuthStateChanged((userLogin) => {
-  //     if (userLogin) {
-  //       setUser(userLogin.refreshToken);
-  //       redirect("/");
-  //     } else {
-  //       setUser("");
-  //       redirect("/login");
-  //     }
-  //   });
-  //   return unsubrice;
-  // }, []);
-  const accessToken = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("accessToken"))
-    ?.split("=")[1];
+  const [user, setUser] = useState<object | undefined>();
+  const history = useNavigate();
+
+  useEffect(() => {
+    const unsubscibed = auth.onAuthStateChanged((userCurrent) => {
+      if (userCurrent) {
+        setUser(userCurrent);
+        return;
+      }
+      setUser(undefined);
+      history("/login");
+    });
+
+    return () => {
+      unsubscibed();
+    };
+  }, [history]);
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          {!accessToken ? (
-            <>
-              {publicRoutes?.map((value) => {
-                let Layout = Fragment;
-                return (
-                  <Route
-                    key={v4()}
-                    element={<Layout>{value?.component}</Layout>}
-                    path={value?.path}
-                  >
-                    {value?.children
-                      ? value?.children.map((item) => (
-                          <Route
-                            key={v4()}
-                            path={item.path}
-                            element={item.component}
-                          />
-                        ))
-                      : null}
-                  </Route>
-                );
-              })}
-              <Route path="*" element={<Navigate to="/login" replace />} />
-            </>
-          ) : (
-            <>
-              {privateRoutes?.map((value) => {
-                let Layout = DefaultLayout;
+      <Routes>
+        {!user ? (
+          <>
+            {publicRoutes?.map((value) => {
+              let Layout = Fragment;
+              return (
+                <Route
+                  key={v4()}
+                  element={<Layout>{value?.component}</Layout>}
+                  path={value?.path}
+                >
+                  {value?.children
+                    ? value?.children.map((item) => (
+                        <Route
+                          key={v4()}
+                          path={item.path}
+                          element={item.component}
+                        />
+                      ))
+                    : null}
+                </Route>
+              );
+            })}
+            {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
+          </>
+        ) : (
+          <>
+            {privateRoutes?.map((value) => {
+              let Layout = DefaultLayout;
 
-                return (
-                  <Route
-                    key={v4()}
-                    element={
-                      <Layout dashboard={value.path === "/"}>
-                        {value?.component}
-                      </Layout>
-                    }
-                    path={value?.path}
-                  >
-                    {value?.children
-                      ? value?.children.map((item) => (
-                          <Route
-                            key={v4()}
-                            path={item.path}
-                            element={item.component}
-                          />
-                        ))
-                      : null}
-                  </Route>
-                );
-              })}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </>
-          )}
-        </Routes>
-      </BrowserRouter>
+              return (
+                <Route
+                  key={v4()}
+                  element={
+                    <PrivateRoute
+                      component={
+                        <Layout dashboard={value.path === "/"}>
+                          {value?.component}
+                        </Layout>
+                      }
+                    ></PrivateRoute>
+                  }
+                  path={value?.path}
+                >
+                  {value?.children
+                    ? value?.children.map((item) => (
+                        <Route
+                          key={v4()}
+                          path={item.path}
+                          element={item.component}
+                        />
+                      ))
+                    : null}
+                </Route>
+              );
+            })}
+            {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+          </>
+        )}
+      </Routes>
     </div>
   );
 }

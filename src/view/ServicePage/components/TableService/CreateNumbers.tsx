@@ -6,122 +6,39 @@ import {
 } from "@ant-design/icons";
 import { Badge, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import moment from "moment";
 import React, { ReactElement, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../../../hooks";
 
 interface DataType {
-  id: string;
-  deviceId: string;
-  deviceName: string;
-  deviceIp: string;
-  statusActive: string;
-  statusConect: string;
-  deviceService: string;
+  ordinalNumbers: string;
+  statusCreateNumbers: string;
 }
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "Mã thiết bị",
-    dataIndex: "deviceId",
-    key: "deviceId",
+    title: "Số thứ tự",
+    dataIndex: "ordinalNumbers",
+    key: "ordinalNumbers",
     render: (text) => <a>{text}</a>,
   },
+
   {
-    title: "Tên thiết bị",
-    dataIndex: "deviceName",
-    key: "deviceName",
-  },
-  {
-    title: "Địa chỉ IP",
-    dataIndex: "deviceIp",
-    key: "deviceIp",
-  },
-  {
-    title: "Trạng thái hoạt động",
-    key: "activeStatus",
-    dataIndex: "activeStatus",
-    render: (_, { statusActive }) => {
+    title: "Trạng thái",
+    key: "statusCreateNumbers",
+    dataIndex: "statusCreateNumbers",
+    render: (_, { statusCreateNumbers }) => {
       return (
         <>
-          {statusActive === "active" ? (
-            <Badge status="success" text="Đang hoạt động" />
+          {statusCreateNumbers === "waiting" ? (
+            <Badge status="success" text="Đang chờ" />
           ) : (
-            <Badge status="error" text="Ngưng hoạt động" />
+            <Badge status="error" text="Đã sử dụng" />
           )}
         </>
       );
     },
-  },
-  {
-    title: "Trạng thái kết nối",
-    key: "statusConect",
-    render: (_, record) => (
-      <>
-        {record.statusConect === "conected" ? (
-          <Badge status="success" text="Kết nối" />
-        ) : (
-          <Badge status="error" text="Mất kết nối" />
-        )}
-      </>
-    ),
-  },
-  {
-    title: "Dịch vụ sử dụng",
-    key: "deviceService",
-    render: (_, { deviceService }) => (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          margin: "0px 160px 0px 16px",
-        }}
-      >
-        <span>{deviceService}</span>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "start",
-            color: "#4277FF",
-            textDecoration: "underline",
-          }}
-        >
-          Xem thêm
-        </div>
-      </div>
-    ),
-  },
-  {
-    key: "detail",
-    render: (_, { id }) => (
-      <Link
-        to={`/device/detail/${id}`}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          color: "#4277FF",
-          textDecoration: "underline",
-        }}
-      >
-        Chi tiết
-      </Link>
-    ),
-  },
-  {
-    key: "update",
-    render: (_, { id }) => (
-      <Link
-        to={`/device/update/${id}`}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          color: "#4277FF",
-          textDecoration: "underline",
-        }}
-      >
-        Cập nhật
-      </Link>
-    ),
   },
 ];
 
@@ -231,6 +148,20 @@ const itemRender = (_: any, type: string, originalElement: ReactNode) => {
 export default function TableCreateNumbers() {
   //   const devices = useAppSelector((state) => state.device.devices);
   //   data = devices;
+  const numbers = useAppSelector(
+    (state) => state.service.numbersProvidedbyService
+  );
+  moment.defaultFormat = "DD.MM.YYYY HH:mm";
+  data = numbers.map((item: any) => {
+    return {
+      ordinalNumbers: item?.service?.option?.preFix
+        ? item?.ordinalNumbers + item?.service?.serviceId
+        : item?.service?.serviceId + item?.ordinalNumbers,
+
+      statusCreateNumbers: "waiting",
+    };
+  });
+
   return (
     <Table
       className="table__device"

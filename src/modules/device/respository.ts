@@ -1,6 +1,13 @@
 import { async } from "@firebase/util";
 import { query } from "express";
-import { collection, doc, getDocs, setDoc, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../../firebase/config";
 export const getDevices = async () => {
   let devices: Array<undefined | object> = [];
@@ -33,4 +40,15 @@ export const updateDevice = async ({
   id: string;
 }) => {
   return setDoc(doc(db, "devices", id), { ...device, id });
+};
+
+export const getDetailProvideNumberOfDevice = async ({
+  id,
+}: {
+  id: string | undefined;
+}) => {
+  if (id) {
+    const numberDoc = await getDoc(doc(db, "provideNumbers", id));
+    return numberDoc.data();
+  }
 };

@@ -127,16 +127,31 @@
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import React from "react";
 import { db } from "../../firebase/config";
 
 export default function repository() {}
 export const getProfile = async (email?: string) => {
-  const emailCurrent = email || getAuth().currentUser?.email;
+  const emailCurrent = getAuth().currentUser?.email;
   if (emailCurrent) {
     const docRef = doc(db, "users", emailCurrent);
-    const docSnap = await getDoc(docRef);
-    return docSnap.data();
+    const userQuery = query(
+      collection(db, "users"),
+      where("email", "==", emailCurrent)
+    );
+    const userQuerySnapshot = await getDocs(userQuery);
+    const user: Array<any> | undefined = [];
+    userQuerySnapshot.forEach((doc) => {
+      user.push(doc.data());
+    });
+    return user[0];
   }
 };

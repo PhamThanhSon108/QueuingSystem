@@ -3,6 +3,7 @@ import profileStore from "../modules/authentication/profileStore";
 import { deviceStore } from "../modules/device/deviceStore";
 import { provideNumbersStore } from "../modules/provideNumbers/provideNumbersStore";
 import { serviceStore } from "../modules/service/serviceStore";
+import { accountStore } from "../modules/setting/AccountManagement/accountStore";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     device: deviceStore.reducer,
     service: serviceStore.reducer,
     provideNumbers: provideNumbersStore.reducer,
+    account: accountStore.reducer,
   },
 });
 

@@ -24,18 +24,11 @@ const Profile = () => {
   const dispatch = useAppDispatch();
   const [form] = Form.useForm();
   const user = useAppSelector((state) => state.profile.user);
-
   useEffect(() => {
     if (user != null) {
       form.setFieldsValue(user);
     }
   }, [form, user]);
-  useEffect(() => {
-    getProfile("iswFzKlZkLdTaJvJNEib").then((user) => {
-      dispatch(updateProfileInStore({ user }));
-    });
-  }, []);
-
   return (
     <div>
       <div className="profile-page">

@@ -65,6 +65,7 @@ export const provideNumber = async ({ id }: { id: string }) => {
     ordinalNumbers: newOrdinalNumbers,
     customerName: "Pham Thanh Son",
     service: {
+      id: currentService?.id,
       serviceId: currentService?.serviceId,
       serviceName: currentService?.serviceName,
       option: {

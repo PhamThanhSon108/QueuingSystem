@@ -9,20 +9,24 @@ import { Link, useNavigate } from "react-router-dom";
 import { getDevices } from "../../../modules/device/respository";
 import { useEffect } from "react";
 import { deviceStore } from "../../../modules/device/deviceStore";
-import { useAppDispatch } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 type deviceProps = {
   setStatus?: (value: string) => void;
 };
 export default function Device({ setStatus }: deviceProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const devices = useAppSelector((state) => state.device.devices);
+
   const handleAddDevice = () => {
     navigate("add");
   };
   useEffect(() => {
-    getDevices().then((deviceSnap) => {
-      dispatch(deviceStore.actions.fetchDevices({ devices: deviceSnap }));
-    });
+    if (!devices)
+      getDevices().then((deviceSnap) => {
+        dispatch(deviceStore.actions.fetchDevices({ devices: deviceSnap }));
+      });
   }, []);
   return (
     <div className="devicepage">
