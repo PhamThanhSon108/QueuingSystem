@@ -38,7 +38,7 @@ export const addAccount = async ({
         profile?.password
       );
       const id = v4();
-      return await setDoc(doc(db, "users", v4()), { ...profile, id });
+      return await setDoc(doc(db, "users", id), { ...profile, id });
     }
   } catch (error) {
     return error;

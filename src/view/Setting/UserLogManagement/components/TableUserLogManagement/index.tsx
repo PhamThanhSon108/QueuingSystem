@@ -8,11 +8,12 @@ import { Badge, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React, { ReactElement, ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../../../../../hooks";
 
 interface DataType {
   id: string;
   userName: string;
-  impactTime: string;
+  createdTime: string;
   ipAddress: string;
   manipulation: string;
 }
@@ -26,8 +27,8 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: "Thời gian tác động",
-    dataIndex: "impactTime",
-    key: "impactTime",
+    dataIndex: "createdTime",
+    key: "createdTime",
   },
   {
     title: "IP thực hiện",
@@ -36,69 +37,12 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: "Thao tác thực hiện",
-    dataIndex: "manipulation",
-    key: "manipulation",
+    dataIndex: "log",
+    key: "log",
   },
 ];
 
-let data: DataType[] = [
-  {
-    id: "123",
-    userName: "phamthanhson",
-    impactTime: "14/11/2022 15:17:50",
-    ipAddress: "192.168.1.1",
-    manipulation: "Cập nhật thông tin dịch vụ",
-  },
-  {
-    id: "123",
-    userName: "phamthanhson",
-    impactTime: "14/11/2022 15:17:50",
-    ipAddress: "192.168.1.1",
-    manipulation: "Cập nhật thông tin dịch vụ",
-  },
-  {
-    id: "123",
-    userName: "phamthanhson",
-    impactTime: "14/11/2022 15:17:50",
-    ipAddress: "192.168.1.1",
-    manipulation: "Cập nhật thông tin dịch vụ",
-  },
-  {
-    id: "123",
-    userName: "phamthanhson",
-    impactTime: "14/11/2022 15:17:50",
-    ipAddress: "192.168.1.1",
-    manipulation: "Cập nhật thông tin dịch vụ",
-  },
-  {
-    id: "123",
-    userName: "phamthanhson",
-    impactTime: "14/11/2022 15:17:50",
-    ipAddress: "192.168.1.1",
-    manipulation: "Cập nhật thông tin dịch vụ",
-  },
-  {
-    id: "123",
-    userName: "phamthanhson",
-    impactTime: "14/11/2022 15:17:50",
-    ipAddress: "192.168.1.1",
-    manipulation: "Cập nhật thông tin dịch vụ",
-  },
-  {
-    id: "123",
-    userName: "phamthanhson",
-    impactTime: "14/11/2022 15:17:50",
-    ipAddress: "192.168.1.1",
-    manipulation: "Cập nhật thông tin dịch vụ",
-  },
-  {
-    id: "123",
-    userName: "phamthanhson",
-    impactTime: "14/11/2022 15:17:50",
-    ipAddress: "192.168.1.1",
-    manipulation: "Cập nhật thông tin dịch vụ",
-  },
-];
+let data: DataType[] = [];
 const itemRender = (_: any, type: string, originalElement: ReactNode) => {
   if (type === "prev") {
     return (
@@ -113,11 +57,12 @@ const itemRender = (_: any, type: string, originalElement: ReactNode) => {
   return originalElement;
 };
 export default function TableUserLogManegement() {
+  const userLogs = useAppSelector((state) => state.userLog.userLogs);
   return (
     <Table
       className="table__device"
       columns={columns}
-      dataSource={data}
+      dataSource={userLogs || data}
       size={"middle"}
       pagination={{
         pageSize: 9,

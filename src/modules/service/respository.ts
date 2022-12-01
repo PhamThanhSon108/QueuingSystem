@@ -9,6 +9,7 @@ import {
   query,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
+import { writeLog } from "../device/respository";
 export const getServices = async () => {
   let services: Array<undefined | object> = [];
   const q = collection(db, "services");
@@ -29,7 +30,12 @@ export const addService = async ({
   service: object;
   id: string;
 }) => {
-  return setDoc(doc(db, "services", id), { ...service, id });
+  writeLog({ log: "Thêm dịch vụ" });
+  return setDoc(doc(db, "services", id), {
+    ...service,
+    id,
+    serviceStatusActive: "active",
+  });
 };
 
 export const updateService = async ({
@@ -39,6 +45,8 @@ export const updateService = async ({
   service: object;
   id: string;
 }) => {
+  writeLog({ log: "Điều chỉnh dịch vụ" });
+
   return setDoc(doc(db, "services", id), { ...service, id });
 };
 
@@ -57,6 +65,5 @@ export const getNumbersProvidedbyService = async ({
   querySnapshot.forEach((doc) => {
     numbers.push(doc.data());
   });
-  console.log(numbers, ["numbers"]);
   return numbers;
 };

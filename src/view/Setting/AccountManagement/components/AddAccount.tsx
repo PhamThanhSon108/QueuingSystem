@@ -182,8 +182,6 @@ export default function AddAccount() {
                     /> */}
                     <Select style={{ height: "44px !important" }}>
                       {RoleOption.map((value) => {
-                        console.log(value);
-
                         return (
                           <Option key={v4()} value={value}>
                             {value}

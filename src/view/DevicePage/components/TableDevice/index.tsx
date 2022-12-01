@@ -10,7 +10,7 @@ import React, { ReactElement, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../hooks";
 
-interface DataType {
+export interface DataType {
   id: string;
   deviceId: string;
   deviceName: string;
@@ -39,8 +39,8 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: "Trạng thái hoạt động",
-    key: "activeStatus",
-    dataIndex: "activeStatus",
+    key: "statusActive",
+    dataIndex: "statusActive",
     render: (_, { statusActive }) => {
       return (
         <>

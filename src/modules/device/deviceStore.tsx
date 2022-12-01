@@ -44,7 +44,7 @@ export const deviceStore = createSlice({
     fetchDevices: (
       state,
       action: PayloadAction<{
-        devices: object[] | any;
+        devices: { statusActive: "active" | "inactive" }[] | any;
       }>
     ) => Object.assign(state, { devices: action.payload.devices }),
 

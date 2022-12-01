@@ -16,7 +16,6 @@ interface DataType {
   serviceName: string;
   serviceDescription: string;
   serviceStatusActive: string;
-  serviceService: string;
 }
 
 const columns: ColumnsType<DataType> = [

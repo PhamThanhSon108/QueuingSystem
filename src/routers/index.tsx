@@ -105,6 +105,5 @@ export const privateRoutes: routeType[] = [
 export const publicRoutes: routeType[] = [
   //auth
   { path: routes.login, component: <Login /> },
-
   { path: routes.reset, component: <ForgotPassword /> },
 ];

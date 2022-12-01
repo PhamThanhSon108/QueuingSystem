@@ -21,15 +21,15 @@ export default function Homepage() {
     (state) => state.provideNumbers.provideNumbers
   );
   useEffect(() => {
-    if (!devices)
+    if (!devices || devices?.length === 0)
       getDevices().then((deviceSnap) => {
         dispatch(deviceStore.actions.fetchDevices({ devices: deviceSnap }));
       });
-    if (!services)
+    if (!services || services?.length === 0)
       getServices().then((serviceSnap) => {
         dispatch(serviceStore.actions.fetchService({ services: serviceSnap }));
       });
-    if (!numbers)
+    if (!numbers || numbers?.length === 0)
       getProvideNumbers().then((number) => {
         dispatch(
           provideNumbersStore.actions.fetchprovideNumbers({

@@ -38,10 +38,9 @@ export default function Service() {
     }
   };
   useEffect(() => {
-    if (!services)
-      getServices().then((serviceSnap) => {
-        dispatch(serviceStore.actions.fetchService({ services: serviceSnap }));
-      });
+    getServices().then((serviceSnap) => {
+      dispatch(serviceStore.actions.fetchService({ services: serviceSnap }));
+    });
   }, []);
   return (
     <div className="devicepage">

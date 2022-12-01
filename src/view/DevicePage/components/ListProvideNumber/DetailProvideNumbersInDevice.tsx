@@ -58,7 +58,6 @@ export default function DetailProvideNumbersInDevice() {
   >();
   useEffect(() => {
     getDetailProvideNumberOfDevice({ id }).then((numberProvide) => {
-      console.log(numberProvide, "number");
       setNumber({
         id: numberProvide?.id,
         ordinalNumbers: numberProvide?.service?.option?.preFix

@@ -43,7 +43,7 @@ export default function ProvideNumbers() {
     }
   };
   useEffect(() => {
-    if (!numbers)
+    if (!numbers || numbers?.length === 0)
       getProvideNumbers().then((number) => {
         dispatch(
           provideNumbersStore.actions.fetchprovideNumbers({

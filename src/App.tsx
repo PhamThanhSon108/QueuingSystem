@@ -30,7 +30,8 @@ function App() {
         return;
       }
       setUser(undefined);
-      history("/login");
+
+      // history("/login");
     });
 
     return () => {
@@ -63,6 +64,7 @@ function App() {
                 </Route>
               );
             })}
+
             {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
           </>
         ) : (

@@ -4,6 +4,7 @@ import { deviceStore } from "../modules/device/deviceStore";
 import { provideNumbersStore } from "../modules/provideNumbers/provideNumbersStore";
 import { serviceStore } from "../modules/service/serviceStore";
 import { accountStore } from "../modules/setting/AccountManagement/accountStore";
+import { userLogStore } from "../modules/setting/userLog/userLog.Store";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     service: serviceStore.reducer,
     provideNumbers: provideNumbersStore.reducer,
     account: accountStore.reducer,
+    userLog: userLogStore.reducer,
   },
 });
 

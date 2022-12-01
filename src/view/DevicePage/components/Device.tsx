@@ -23,11 +23,10 @@ export default function Device({ setStatus }: deviceProps) {
     navigate("add");
   };
   useEffect(() => {
-    if (!devices)
-      getDevices().then((deviceSnap) => {
-        dispatch(deviceStore.actions.fetchDevices({ devices: deviceSnap }));
-      });
-  }, []);
+    getDevices().then((deviceSnap) => {
+      dispatch(deviceStore.actions.fetchDevices({ devices: deviceSnap }));
+    });
+  }, [devices?.length]);
   return (
     <div className="devicepage">
       <Row className="devicepage__title">

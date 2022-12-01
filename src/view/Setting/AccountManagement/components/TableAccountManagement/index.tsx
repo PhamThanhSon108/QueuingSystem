@@ -199,7 +199,6 @@ export default function TableAccountManagement() {
     return state.account.accounts;
   });
   data = accounts;
-  console.log(data, ["data of account"]);
   return (
     <Table
       className="table__device"

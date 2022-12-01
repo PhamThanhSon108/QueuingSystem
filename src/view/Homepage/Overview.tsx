@@ -11,9 +11,57 @@ import "./Homepage.scss";
 
 export default function Overview() {
   const devices = useAppSelector((state) => state.device.devices);
-  // for(let i = 0; i < devices?.length; i++) {
-
-  // }
+  const services = useAppSelector((state) => state.service.services);
+  const numbers = useAppSelector(
+    (state) => state.provideNumbers.provideNumbers
+  );
+  const deviceProps = {
+    active: 0,
+    inactive: 0,
+  };
+  const serviceProps = {
+    active: 0,
+    inactive: 0,
+  };
+  if (services?.length > 0) {
+    services.forEach(
+      (service: {
+        id: string;
+        serviceId: string;
+        serviceName: string;
+        serviceDescription: string;
+        serviceStatusActive: string;
+        serviceService: string;
+      }) => {
+        service?.serviceStatusActive === "active"
+          ? serviceProps.active++
+          : serviceProps.inactive++;
+      }
+    );
+  }
+  if (devices?.length) {
+    devices.forEach(
+      (
+        device:
+          | {
+              statusActive: {
+                id: string;
+                deviceId: string;
+                deviceName: string;
+                deviceIp: string;
+                statusActive: string;
+                statusConect: string;
+                deviceService: string;
+              };
+            }
+          | any
+      ) => {
+        device.statusActive === "active"
+          ? deviceProps.active++
+          : deviceProps.inactive++;
+      }
+    );
+  }
   return (
     <div
       className="homepage__wrap"
@@ -49,7 +97,7 @@ export default function Overview() {
         </Col>
         <Col span={3} className="homepage__overview-information-num">
           <div className="homepage__overview-information-num">
-            <div>12345</div> <div>12345</div>
+            <div>{deviceProps.active}</div> <div>{deviceProps.inactive}</div>
           </div>
         </Col>
       </Row>
@@ -58,7 +106,9 @@ export default function Overview() {
           <RadialChart color="#4277ff" />
         </div>
         <Col span={7} className={"homepage__overview-chart-total"}>
-          <span className="homepage__overview-chart-total-num">4.221</span>
+          <span className="homepage__overview-chart-total-num">
+            {services?.length}
+          </span>
           <div className="homepage__overview-chart-total-title blue">
             {images.icon.service}
             <span>Dịch vụ</span>
@@ -76,7 +126,7 @@ export default function Overview() {
         </Col>
         <Col span={3} className="homepage__overview-information-num">
           <div className="homepage__overview-information-num blue">
-            <div>12345</div> <div>12345</div>
+            <div>{serviceProps.active}</div> <div>{serviceProps.inactive}</div>
           </div>
         </Col>
       </Row>
@@ -86,7 +136,9 @@ export default function Overview() {
           <RadialChart color="#35c75a" />
         </div>
         <Col span={7} className={"homepage__overview-chart-total"}>
-          <span className="homepage__overview-chart-total-num">4.221</span>
+          <span className="homepage__overview-chart-total-num">
+            {numbers?.length}
+          </span>
           <div className="homepage__overview-chart-total-title green">
             {images.icon.nums}
             <span>Cấp số</span>

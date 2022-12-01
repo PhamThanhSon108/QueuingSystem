@@ -135,7 +135,6 @@ export default function UserHeader() {
   };
   const dispatch = useAppDispatch();
   const user: any = useAppSelector((state) => state.profile.user);
-  console.log(user, "user name");
   useEffect(() => {
     if (!user)
       getProfile().then((user) => {
