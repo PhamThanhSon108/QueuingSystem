@@ -1,20 +1,16 @@
-import { Col, Row, Select, Typography } from "antd";
+import { Col, Row, Typography } from "antd";
 import Search from "antd/lib/input/Search";
-import { Option } from "antd/lib/mentions";
 import { DatePicker } from "antd";
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import type { Moment } from "moment";
-import { useAppDispatch } from "../../../../hooks";
 import { images } from "../../../../assets/images";
 import TableRoleManegement from "./TableRoleManegement";
 
 const { RangePicker } = DatePicker;
 type RangeValue = [Moment | null, Moment | null] | null;
 export default function RoleManagement() {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const [dates, setDates] = useState<RangeValue>(null);
   const [value, setValue] = useState<RangeValue>(null);
   const disabledDate = (current: Moment) => {

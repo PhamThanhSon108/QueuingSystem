@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import type { Moment } from "moment";
-import { useAppDispatch } from "../../../../../hooks";
+import { useAppDispatch } from "../../../../../shared/hooks";
 import TableUserLogManegement from ".";
 import { images } from "../../../../../assets/images";
 import { getUserLogs } from "../../../../../modules/setting/userLog/respository";

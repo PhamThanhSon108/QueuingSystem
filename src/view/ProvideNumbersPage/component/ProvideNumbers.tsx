@@ -9,7 +9,7 @@ import { images } from "../../../assets/images";
 import type { Moment } from "moment";
 
 import { getServices } from "../../../modules/service/respository";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../shared/hooks";
 
 import TableProvideNumbers from "./TableProvideNumbers/TableProvideNumbers";
 import { getProvideNumbers } from "../../../modules/provideNumbers/respository";

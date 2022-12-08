@@ -1,8 +1,9 @@
 import { ArrowDownOutlined } from "@ant-design/icons";
 import Icon from "@ant-design/icons/lib/components/AntdIcon";
 import { Badge, Card, Col, Row, Space, Typography } from "antd";
+import { useMemo } from "react";
 import { images } from "../../assets/images";
-import { useAppSelector } from "../../hooks";
+import { useAppSelector } from "../../shared/hooks";
 
 import CalendarOverview from "./Calendar/CalendarOverview";
 import RadialChart from "./Chart/RadialChart";
@@ -15,53 +16,86 @@ export default function Overview() {
   const numbers = useAppSelector(
     (state) => state.provideNumbers.provideNumbers
   );
-  const deviceProps = {
-    active: 0,
-    inactive: 0,
+  const handleStaticDevices = () => {
+    const deviceProps = {
+      active: 0,
+      inactive: 0,
+    };
+    if (devices?.length) {
+      devices.forEach(
+        (
+          device:
+            | {
+                statusActive: {
+                  id: string;
+                  deviceId: string;
+                  deviceName: string;
+                  deviceIp: string;
+                  statusActive: string;
+                  statusConect: string;
+                  deviceService: string;
+                };
+              }
+            | any
+        ) => {
+          device.statusActive === "active"
+            ? deviceProps.active++
+            : deviceProps.inactive++;
+        }
+      );
+    }
+    return deviceProps;
   };
-  const serviceProps = {
-    active: 0,
-    inactive: 0,
+
+  const handleStaticServices = () => {
+    const serviceProps = {
+      active: 0,
+      inactive: 0,
+    };
+    if (services?.length > 0) {
+      services.forEach(
+        (service: {
+          id: string;
+          serviceId: string;
+          serviceName: string;
+          serviceDescription: string;
+          serviceStatusActive: string;
+          serviceService: string;
+        }) => {
+          service?.serviceStatusActive === "active"
+            ? serviceProps.active++
+            : serviceProps.inactive++;
+        }
+      );
+    }
+    return serviceProps;
   };
-  if (services?.length > 0) {
-    services.forEach(
-      (service: {
-        id: string;
-        serviceId: string;
-        serviceName: string;
-        serviceDescription: string;
-        serviceStatusActive: string;
-        serviceService: string;
-      }) => {
-        service?.serviceStatusActive === "active"
-          ? serviceProps.active++
-          : serviceProps.inactive++;
-      }
-    );
-  }
-  if (devices?.length) {
-    devices.forEach(
-      (
-        device:
-          | {
-              statusActive: {
-                id: string;
-                deviceId: string;
-                deviceName: string;
-                deviceIp: string;
-                statusActive: string;
-                statusConect: string;
-                deviceService: string;
-              };
-            }
-          | any
-      ) => {
-        device.statusActive === "active"
-          ? deviceProps.active++
-          : deviceProps.inactive++;
-      }
-    );
-  }
+
+  const handleStaticProvideNums = () => {
+    const numsProps = {
+      waiting: 0,
+      used: 0,
+      skipped: 0,
+    };
+
+    if (numbers?.length > 0) {
+      numbers.forEach((number: { statusCreateNumbers: string }) => {
+        if (number.statusCreateNumbers === "waiting") {
+          numsProps.waiting++;
+        }
+        if (number.statusCreateNumbers === "used") {
+          numsProps.used++;
+        }
+        if (number.statusCreateNumbers === "skipped") {
+          numsProps.skipped++;
+        }
+      });
+    }
+    return numsProps;
+  };
+  const deviceProps = useMemo(handleStaticDevices, [devices]);
+  const numsProps = useMemo(handleStaticProvideNums, [numbers]);
+  const serviceProps = useMemo(handleStaticServices, [services]);
   return (
     <div
       className="homepage__wrap"
@@ -74,7 +108,11 @@ export default function Overview() {
       </Row>
       <Row className="homepage__overview-chart-wrap">
         <div className="homepage__overview-chart">
-          <RadialChart />
+          <RadialChart
+            color="#ff7506"
+            field1={deviceProps.active}
+            field2={deviceProps.inactive}
+          />
         </div>
         <Col span={7} className={"homepage__overview-chart-total"}>
           <span className="homepage__overview-chart-total-num">
@@ -103,7 +141,11 @@ export default function Overview() {
       </Row>
       <Row className="homepage__overview-chart-wrap">
         <div className="homepage__overview-chart">
-          <RadialChart color="#4277ff" />
+          <RadialChart
+            color="#4277ff"
+            field1={serviceProps.active}
+            field2={serviceProps.inactive}
+          />
         </div>
         <Col span={7} className={"homepage__overview-chart-total"}>
           <span className="homepage__overview-chart-total-num">
@@ -133,7 +175,12 @@ export default function Overview() {
 
       <Row className="homepage__overview-chart-wrap">
         <div className="homepage__overview-chart">
-          <RadialChart color="#35c75a" />
+          <RadialChart
+            color="#35c75a"
+            field1={numsProps.used}
+            field2={numsProps.waiting}
+            field3={numsProps.skipped}
+          />
         </div>
         <Col span={7} className={"homepage__overview-chart-total"}>
           <span className="homepage__overview-chart-total-num">
@@ -159,7 +206,8 @@ export default function Overview() {
         </Col>
         <Col span={3} className="homepage__overview-information-num">
           <div className="homepage__overview-information-num green">
-            <div>3721</div> <div>688</div> <div>72</div>
+            <div>{numsProps.used}</div> <div>{numsProps.waiting}</div>{" "}
+            <div>{numsProps.skipped}</div>
           </div>
         </Col>
       </Row>

@@ -7,17 +7,22 @@ import {
   setDoc,
   where,
   query,
+  updateDoc,
+  orderBy,
+  Timestamp,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { writeLog } from "../device/respository";
 export const getServices = async () => {
   let services: Array<undefined | object> = [];
-  const q = collection(db, "services");
+  const q = query(
+    collection(db, "services"),
+
+    orderBy("serviceId", "desc")
+  );
 
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    // console.log(doc.id, " => ", doc.data());
     services.push(doc.data());
   });
   return services;
@@ -35,6 +40,8 @@ export const addService = async ({
     ...service,
     id,
     serviceStatusActive: "active",
+    createdAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
   });
 };
 
@@ -47,7 +54,11 @@ export const updateService = async ({
 }) => {
   writeLog({ log: "Điều chỉnh dịch vụ" });
 
-  return setDoc(doc(db, "services", id), { ...service, id });
+  return updateDoc(doc(db, "services", id), {
+    ...service,
+    id,
+    updatedAt: Timestamp.now(),
+  });
 };
 
 export const getNumbersProvidedbyService = async ({
@@ -59,6 +70,7 @@ export const getNumbersProvidedbyService = async ({
   const provideNumbersCollection = query(
     collection(db, "provideNumbers"),
     where("service.id", "==", id)
+    // orderBy("createdAt", "desc")
   );
 
   const querySnapshot = await getDocs(provideNumbersCollection);

@@ -11,7 +11,7 @@ import {
 } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../../hooks";
+import { useAppDispatch } from "../../../shared/hooks";
 import { addDevice } from "../../../modules/device/respository";
 
 import { v4 as uuidv4 } from "uuid";

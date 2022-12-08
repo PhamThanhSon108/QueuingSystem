@@ -1,11 +1,11 @@
 import { Button, Col, Form, Input, Row, Select, Typography } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "./AddDevice.scss";
-import { useAppSelector } from "../../../hooks";
-import { updateDevice } from "../../../modules/device/respository";
+import { useAppSelector } from "../../../shared/hooks";
+import { getDevice, updateDevice } from "../../../modules/device/respository";
 import { Option } from "antd/lib/mentions";
 import { v4 } from "uuid";
+import "./AddDevice.scss";
 const DeviceTypeOption = ["Kiosk", "Display counter"];
 const labelFormDevice = {
   deviceId: {
@@ -42,24 +42,22 @@ export default function UpdateDevice() {
   const [form] = Form.useForm();
   const { id } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const handleCancel = () => {
     navigate("/device");
   };
-  const handleConfirm = () => {};
-  const devices: Array<any> | undefined = useAppSelector((state) => {
-    return state.device.devices;
-  });
-  const device = devices?.find((value) => value.id == id);
-
-  const services: Array<any> | undefined = useAppSelector((state) => {
-    return state.service.services;
-  });
-
-  DeviceServiceOption = services.map((value) => ({
-    name: value?.serviceName,
-    id: value?.id,
-  }));
-  const [loading, setLoading] = useState<boolean>(false);
+  const services: Array<{ serviceName: string; id: string }> | undefined =
+    useAppSelector((state) => {
+      return state.service.services;
+    });
+  DeviceServiceOption = useMemo(
+    () =>
+      services.map((value) => ({
+        name: value?.serviceName,
+        id: value?.id,
+      })),
+    [services]
+  );
   const handleUpdateDevice = (data: FormData) => {
     if (id) {
       setLoading(true);
@@ -71,7 +69,9 @@ export default function UpdateDevice() {
   };
   useEffect(() => {
     if (id != null) {
-      form.setFieldsValue(device);
+      getDevice(id).then((device) => {
+        form.setFieldsValue(device.data());
+      });
     }
   }, [form, id]);
 
@@ -260,7 +260,6 @@ export default function UpdateDevice() {
             htmlType="submit"
             form="updateDeviceForm"
             loading={loading}
-            onClick={handleConfirm}
           >
             Cập nhật
           </Button>

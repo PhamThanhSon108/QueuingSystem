@@ -9,7 +9,7 @@ import { Link, useParams } from "react-router-dom";
 import type { Moment } from "moment";
 import { images } from "../../../assets/images";
 import TableCreateNumbers from "./TableService/CreateNumbers";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../shared/hooks";
 import { getNumbersProvidedbyService } from "../../../modules/service/respository";
 import { serviceStore } from "../../../modules/service/serviceStore";
 type RangeValue = [Moment | null, Moment | null] | null;

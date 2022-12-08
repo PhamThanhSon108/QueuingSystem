@@ -46,12 +46,13 @@ const profileStore = createSlice({
         user?: UserEntity;
         listPermissionCode?: string[];
       }>
-    ) =>
+    ) => {
       Object.assign(state, {
         statusLogin: action.payload.user != null,
         user: action.payload.user,
-        listPermissionCode: action.payload.listPermissionCode || [],
-      }),
+        listPermissionCode: action.payload.user?.role || [],
+      });
+    },
     updateProfile: (
       state,
       action: PayloadAction<{
@@ -76,7 +77,6 @@ const profileStore = createSlice({
   },
   extraReducers: (builder) => {
     builder
-
       .addCase(removeProfile, (state: any) => {
         return {
           ...state,
@@ -92,11 +92,24 @@ const profileStore = createSlice({
           statusLogin: !action.payload.token,
         })
       )
-      .addCase(updateProfileInStore, (state, action) =>
-        Object.assign(state, action.payload, {
+      .addCase(updateProfileInStore, (state, action) => {
+        const role = action.payload.user?.role;
+        delete role.createdAt;
+        delete role.updatedAt;
+
+        return Object.assign(state, action.payload, {
           user: action.payload.user,
-        })
-      );
+          listPermissionCode: Object.values(role).reduce(
+            (result: Array<string> | any, cur: any) => {
+              if (typeof cur == "object" && Object.values(cur).length !== 0) {
+                result = [...result, ...Object.keys(cur)];
+              }
+              return result;
+            },
+            []
+          ),
+        });
+      });
   },
 });
 

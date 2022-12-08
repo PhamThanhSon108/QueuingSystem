@@ -1,9 +1,15 @@
 import { Button, Checkbox, Col, Form, Input, Row, Typography } from "antd";
 import "../RoleManagement.scss";
 import TextArea from "antd/lib/input/TextArea";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../../../shared/hooks";
-import { addRoleThunk } from "../../../../modules/setting/RoleManagement/respository";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../../shared/hooks";
+import {
+  addRoleThunk,
+  getRole,
+  updateRole,
+} from "../../../../modules/setting/RoleManagement/respository";
+import { useEffect } from "react";
+import { publicToast } from "../../../../components/toast";
 const labelFormDevice = {
   serviceId: {
     label: "Tên vai trò",
@@ -38,33 +44,36 @@ type roleProps = {
   readRole: boolean;
   readRoles: boolean;
   readServices: boolean;
-  roleDescription: string;
-  roleName: string;
+  description: string;
+  name: string;
   updateDevice: boolean;
   updateRole: boolean;
   updateService: boolean;
 };
-export default function AddRole() {
+type RoleToSave = {
+  deviceRole: keyof roleProps | any;
+  name: string;
+  description: string;
+  serviceRole: object | any;
+  provideNumber: object | any;
+  managementRole: object | any;
+  accountRole: object | any;
+};
+
+export default function UpdateRole() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
+  const { id } = useParams();
   const handleCancel = () => {
     navigate("/service");
   };
-  const handleAddDevice = () => {};
+
   const handleOnfinish = (data: roleProps) => {
-    let role: {
-      deviceRole: keyof roleProps | any;
-      name: string;
-      description: string;
-      serviceRole: object | any;
-      provideNumber: object | any;
-      managementRole: object | any;
-      accountRole: object | any;
-    } = {
-      name: data.roleName,
-      description: data.roleDescription,
+    let role: RoleToSave = {
+      name: data.name,
+      description: data.description,
       deviceRole: {},
       serviceRole: {},
       provideNumber: {},
@@ -100,8 +109,35 @@ export default function AddRole() {
         }
       }
     }
-    dispatch(addRoleThunk({ ...role, navigate: navigate }));
+
+    if (id) dispatch(updateRole({ id, role: role, navigate: navigate }));
   };
+  const formatRole = (currentRole: any) => {
+    form.setFieldsValue({
+      ...currentRole,
+      ...currentRole.deviceRole,
+      ...currentRole.serviceRole,
+      ...currentRole.provideNumber,
+      ...currentRole.managementRole,
+      ...currentRole.accountRole,
+    });
+  };
+  useEffect(() => {
+    if (id) {
+      getRole(id)
+        .then((doc) => {
+          formatRole(doc.data());
+        })
+        .catch((err) => {
+          publicToast({
+            type: "error",
+            message: "Lỗi",
+            description: "Có lỗi trong quá trình xử lý",
+          });
+          navigate("/setting/role");
+        });
+    }
+  }, [form]);
   return (
     <div className="wrap-page">
       <Row className="page-title">
@@ -129,7 +165,7 @@ export default function AddRole() {
                 <div className="main-form">
                   <Form.Item
                     label={labelFormDevice.serviceId.label}
-                    name="roleName"
+                    name="name"
                     rules={[
                       {
                         required: true,
@@ -147,7 +183,7 @@ export default function AddRole() {
                   </Form.Item>
                   <Form.Item
                     label={labelFormDevice.serviceDescription.label}
-                    name="roleDescription"
+                    name="description"
                     style={{ height: "100%" }}
                     rules={[
                       {
@@ -274,9 +310,6 @@ export default function AddRole() {
                                   updateService: true,
                                   readServices: true,
                                 });
-                                // form.setFieldValue("addDevice", true);
-                                // form.setFieldValue("updateDevice", true);
-                                // form.setFieldValue("readDevices", true);
                               }
                             }}
                           >
@@ -464,7 +497,7 @@ export default function AddRole() {
             Hủy bỏ
           </Button>
           <Button className="confirm" htmlType="submit" form="addServiceForm">
-            Thêm vai trò
+            Cập nhật vai trò
           </Button>
         </div>
       </Row>

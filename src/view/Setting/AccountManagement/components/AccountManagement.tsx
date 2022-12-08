@@ -1,7 +1,7 @@
 import { Col, Row, Select, Typography } from "antd";
 import { Option } from "antd/lib/mentions";
 import Search from "antd/lib/input/Search";
-import { useAppDispatch } from "../../../../hooks";
+import { useAppDispatch } from "../../../../shared/hooks";
 import { Link, useNavigate } from "react-router-dom";
 import { images } from "../../../../assets/images";
 import TableAccountManagement from "./TableAccountManagement";

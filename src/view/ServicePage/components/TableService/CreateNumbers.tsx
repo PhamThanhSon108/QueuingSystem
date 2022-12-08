@@ -9,7 +9,7 @@ import type { ColumnsType } from "antd/es/table";
 import moment from "moment";
 import React, { ReactElement, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../../../../hooks";
+import { useAppSelector } from "../../../../shared/hooks";
 
 interface DataType {
   ordinalNumbers: string;

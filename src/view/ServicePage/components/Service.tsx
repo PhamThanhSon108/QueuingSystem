@@ -9,7 +9,7 @@ import TableDevice from "../../DevicePage/components/TableDevice";
 import type { Moment } from "moment";
 import ServiceTable from "./TableService/ServiceTable";
 import { getServices } from "../../../modules/service/respository";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../shared/hooks";
 import { serviceStore } from "../../../modules/service/serviceStore";
 const { RangePicker } = DatePicker;
 type RangeValue = [Moment | null, Moment | null] | null;

@@ -5,15 +5,30 @@ import { RadialBar } from "@ant-design/plots";
 interface Datum {
   star: number;
 }
-function RadialChart({ color }: { color?: string }) {
+function RadialChart({
+  color,
+  field1,
+  field2,
+  field3,
+}: {
+  color?: string;
+  field1?: number;
+  field2?: number;
+  field3?: number;
+}) {
   const data = [
     {
-      name: "X6",
-      star: 297,
+      name: "1",
+      star: field1,
     },
     {
-      name: "G",
-      star: 801,
+      name: "2",
+      star: field2,
+    },
+
+    {
+      name: "3",
+      star: field3,
     },
   ];
   const config = {
@@ -24,19 +39,9 @@ function RadialChart({ color }: { color?: string }) {
     maxAngle: 350,
     radius: 1,
     innerRadius: 0.74,
-    // tooltip: {
-    //   fields: ["name", "star"],
-    //   formatter: (datum: any) => {
-    //     return { name: datum.name, value: datum.star };
-    //   },
-    //   customContent: (data: any, title: any) => {
-    //     console.log(data, title);
-    //     return `<div>${1}</div>`;
-    //   },
-    // },
-    colorField: "star",
+    colorField: "name",
     color: function (type: any) {
-      if (type.star > 800) return color ?? "#ff7506";
+      if (!field3 && type.name == "2") return color || "#ff7506";
       return "#7E7D88";
     },
     barBackground: {
@@ -60,16 +65,6 @@ function RadialChart({ color }: { color?: string }) {
         cursor: "pointer",
       },
     },
-    // annotations: [
-    //   {
-    //     type: "text",
-    //     position: ["median", "median"],
-    //     content: "辅助文本",
-    //     style: {
-    //       fill: "red",
-    //     },
-    //   },
-    // ],
   };
   return <RadialBar style={{ width: "60px", height: "60px" }} {...config} />;
 }

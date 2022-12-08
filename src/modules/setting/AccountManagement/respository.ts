@@ -10,6 +10,7 @@ import {
   query,
   getDoc,
   updateDoc,
+  Timestamp,
 } from "firebase/firestore";
 import { v4 } from "uuid";
 import { auth, db } from "../../../firebase/config";
@@ -38,7 +39,12 @@ export const addAccount = async ({
         profile?.password
       );
       const id = v4();
-      return await setDoc(doc(db, "users", id), { ...profile, id });
+      return await setDoc(doc(db, "users", id), {
+        ...profile,
+        id,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      });
     }
   } catch (error) {
     return error;
@@ -84,7 +90,11 @@ export const updateAccount = async ({
       if (user.email) {
         delete user.email;
       }
-      return await updateDoc(userDoc, { id, ...user });
+      return await updateDoc(userDoc, {
+        id,
+        ...user,
+        updatedAt: Timestamp.now(),
+      });
     }
   } catch (error) {
     return error;

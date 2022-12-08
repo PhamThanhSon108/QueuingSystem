@@ -1,10 +1,9 @@
 import { ArrowDownOutlined } from "@ant-design/icons";
 import { Col, Row, Select, Tag, Typography } from "antd";
 import { Option } from "antd/lib/mentions";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { images } from "../../assets/images";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { deviceStore } from "../../modules/device/deviceStore";
+import { useAppDispatch, useAppSelector } from "../../shared/hooks";
 import { getDevices } from "../../modules/device/respository";
 import { provideNumbersStore } from "../../modules/provideNumbers/provideNumbersStore";
 import { getProvideNumbers } from "../../modules/provideNumbers/respository";
@@ -13,6 +12,7 @@ import { serviceStore } from "../../modules/service/serviceStore";
 import Chart from "./Chart";
 import "./Homepage.scss";
 
+type timeProps = "day" | "week" | "month";
 export default function Homepage() {
   const dispatch = useAppDispatch();
   const devices = useAppSelector((state) => state.device.devices);
@@ -20,11 +20,10 @@ export default function Homepage() {
   const numbers = useAppSelector(
     (state) => state.provideNumbers.provideNumbers
   );
+  const [today] = useState(new Date());
+  const [timeFilter, setTimeFilter] = useState<timeProps>("day");
   useEffect(() => {
-    if (!devices || devices?.length === 0)
-      getDevices().then((deviceSnap) => {
-        dispatch(deviceStore.actions.fetchDevices({ devices: deviceSnap }));
-      });
+    if (!devices || devices?.length === 0) dispatch(getDevices());
     if (!services || services?.length === 0)
       getServices().then((serviceSnap) => {
         dispatch(serviceStore.actions.fetchService({ services: serviceSnap }));
@@ -38,6 +37,189 @@ export default function Homepage() {
         );
       });
   }, []);
+
+  const handleStaticProvideNumbers = () => {
+    const numsProps = {
+      waiting: 0,
+      used: 0,
+      skipped: 0,
+    };
+
+    if (numbers?.length > 0) {
+      numbers.forEach((number: { statusCreateNumbers: string }) => {
+        if (number.statusCreateNumbers === "waiting") {
+          numsProps.waiting++;
+        }
+        if (number.statusCreateNumbers === "used") {
+          numsProps.used++;
+        }
+        if (number.statusCreateNumbers === "skipped") {
+          numsProps.skipped++;
+        }
+      });
+    }
+    return numsProps;
+  };
+
+  const staticFilterByTime = ({ time }: { time: timeProps }) => {
+    let data: any = {};
+    if (time === "day") {
+      data = numbers.reduce(
+        (
+          result: any,
+          currentValue: {
+            createdAt: {
+              nanoseconds: number;
+              seconds: number;
+            };
+          }
+        ) => {
+          const today = new Date();
+          const date = new Date(currentValue.createdAt.seconds * 1000);
+          if (
+            date.getFullYear() === today.getFullYear() &&
+            date.getMonth() === today.getMonth()
+          ) {
+            if (result[date.getDate()]) {
+              result[date.getDate()] = {
+                scales: result[date.getDate()].scales + 1,
+                time: date.getDate().toString(),
+              };
+            } else {
+              result[date.getDate()] = {
+                scales: 1,
+                time: date.getDate().toString(),
+              };
+            }
+          }
+
+          // currentValue.createdAt.seconds;
+          return result;
+        },
+        {}
+      );
+    }
+
+    if (time === "week") {
+      data = numbers.reduce(
+        (
+          result: any,
+          currentValue: {
+            createdAt: {
+              nanoseconds: number;
+              seconds: number;
+            };
+          }
+        ) => {
+          const today = new Date();
+          const date = new Date(currentValue.createdAt.seconds * 1000);
+          if (
+            date.getFullYear() === today.getFullYear() &&
+            date.getMonth() === today.getMonth()
+          ) {
+            if (date.getDate() > 0 && date.getDate() < 8) {
+              result["week1"] =
+                result["week1"]?.scales > 0
+                  ? {
+                      scales: result["week1"].scales + 1,
+                      time: "Tuần 1",
+                    }
+                  : {
+                      scales: 1,
+                      time: "Tuần 1",
+                    };
+            }
+
+            if (date.getDate() > 7 && date.getDate() < 15) {
+              result["week2"] =
+                result["week2"]?.scales > 0
+                  ? {
+                      scales: result["week2"].scales + 1,
+                      time: "Tuần 2",
+                    }
+                  : {
+                      scales: 1,
+                      time: "Tuần 2",
+                    };
+            }
+
+            if (date.getDate() > 14 && date.getDate() < 22) {
+              result["week3"] =
+                result["week3"]?.scales > 0
+                  ? {
+                      scales: result["week3"].scales + 1,
+                      time: "Tuần 3",
+                    }
+                  : {
+                      scales: 1,
+                      time: "Tuần 3",
+                    };
+            }
+
+            if (date.getDate() > 21) {
+              result["week4"] =
+                result["week4"]?.scales > 0
+                  ? {
+                      scales: result["week4"].scales + 1,
+                      time: "Tuần 4",
+                    }
+                  : {
+                      scales: 1,
+                      time: "Tuần 4",
+                    };
+            }
+          }
+
+          // currentValue.createdAt.seconds;
+          return result;
+        },
+        { week1: {}, week2: {}, week3: {}, week4: {} }
+      );
+    }
+
+    if (time === "month") {
+      data = numbers.reduce(
+        (
+          result: any,
+          currentValue: {
+            createdAt: {
+              nanoseconds: number;
+              seconds: number;
+            };
+          }
+        ) => {
+          const today = new Date();
+          const date = new Date(currentValue.createdAt.seconds * 1000);
+          if (date.getFullYear() === today.getFullYear()) {
+            result[date.getMonth() + 1] = result[date.getMonth() + 1]
+              ? {
+                  scales: result[date.getMonth() + 1].scales + 1,
+                  time: (date.getMonth() + 1).toString(),
+                }
+              : {
+                  scales: 1,
+                  time: (date.getMonth() + 1).toString(),
+                };
+          }
+
+          // currentValue.createdAt.seconds;
+          return result;
+        },
+        {}
+      );
+    }
+    return Object.values(data);
+  };
+
+  const handleChangeFilter = (value: timeProps) => {
+    setTimeFilter(value);
+  };
+
+  const numsProps = useMemo(handleStaticProvideNumbers, [numbers]);
+  const staticData = useMemo(
+    () => staticFilterByTime({ time: timeFilter }),
+    [timeFilter, numbers]
+  );
   return (
     <>
       <div className="homepage__wrap">
@@ -59,7 +241,7 @@ export default function Homepage() {
               </div>
               <div className="homepage__item-information-card-body">
                 <span className="homepage__item-information-card-body-number">
-                  4221
+                  {numbers.length}
                 </span>
                 <Tag
                   className="homepage__item-information-card-body-percen"
@@ -82,7 +264,7 @@ export default function Homepage() {
               </div>
               <div className="homepage__item-information-card-body">
                 <span className="homepage__item-information-card-body-number">
-                  4221
+                  {numsProps.used}
                 </span>
                 <Tag
                   className="homepage__item-information-card-body-percen"
@@ -105,7 +287,7 @@ export default function Homepage() {
               </div>
               <div className="homepage__item-information-card-body">
                 <span className="homepage__item-information-card-body-number">
-                  4221
+                  {numsProps.waiting}
                 </span>
                 <Tag
                   className="homepage__item-information-card-body-percen"
@@ -128,7 +310,7 @@ export default function Homepage() {
               </div>
               <div className="homepage__item-information-card-body">
                 <span className="homepage__item-information-card-body-number">
-                  4221
+                  {numsProps.skipped}
                 </span>
                 <Tag
                   className="homepage__item-information-card-body-percen"
@@ -150,10 +332,17 @@ export default function Homepage() {
           >
             <Typography>
               <Typography.Title className="homepage__chart-title">
-                Bảng thống kê theo ngày
+                {timeFilter === "day" && "Thống kê theo ngày"}
+                {timeFilter === "week" && "Thống kê theo tuần"}
+                {timeFilter === "month" && "Thống kê theo tháng"}
               </Typography.Title>
               <Typography.Text className="homepage__chart-month">
-                Tháng 11/2022
+                {(timeFilter === "day" || timeFilter === "week") &&
+                  `Xem theo tháng ${
+                    today.getMonth() + 1
+                  } / ${today.getFullYear()} `}
+                {timeFilter === "month" &&
+                  `Xem theo năm ${today.getFullYear()}`}
               </Typography.Text>
             </Typography>
             <div className="filter__wrap">
@@ -163,7 +352,7 @@ export default function Homepage() {
               <Select
                 suffixIcon={images.icon.arrow}
                 className="filter__wrap-select"
-                defaultValue={"day"}
+                // defaultValue={"day"}
                 placeholder="Lọc theo"
                 optionFilterProp="children"
                 filterOption={(input, option) =>
@@ -171,6 +360,8 @@ export default function Homepage() {
                     .toLowerCase()
                     .includes(input.toLowerCase())
                 }
+                onChange={handleChangeFilter}
+                defaultValue="day"
               >
                 <Option value="day">Ngày</Option>
                 <Option value="week">Tuần</Option>
@@ -178,7 +369,7 @@ export default function Homepage() {
               </Select>
             </div>
           </Row>
-          <Chart />
+          <Chart staticData={staticData} />
         </Row>
       </div>
     </>

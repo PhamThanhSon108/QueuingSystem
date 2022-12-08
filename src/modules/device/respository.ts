@@ -9,12 +9,18 @@ import {
   Timestamp,
   where,
   query,
+  updateDoc,
+  orderBy,
 } from "firebase/firestore";
 import { v4 } from "uuid";
 import { db } from "../../firebase/config";
 
 import { getAuth } from "firebase/auth";
 import axios from "axios";
+import { useAppSelector } from "../../shared/hooks";
+import { createAsyncThunk, Selector } from "@reduxjs/toolkit";
+
+type RootState = any;
 export const writeLog = async ({ log }: { log: string }) => {
   //time
   //ip
@@ -43,20 +49,19 @@ export const writeLog = async ({ log }: { log: string }) => {
     log,
     userEmail: currentUserEmail,
     userName: user[0]?.userName,
+    notify: [],
   });
 };
-export const getDevices = async () => {
+export const getDevices = createAsyncThunk("devices/list", async () => {
   let devices: Array<undefined | object> = [];
-  const q = collection(db, "devices");
+  const q = query(collection(db, "devices"));
 
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    // console.log(doc.id, " => ", doc.data());
     devices.push(doc.data());
   });
   return devices;
-};
+});
 
 export const addDevice = async ({
   device,
@@ -71,6 +76,8 @@ export const addDevice = async ({
     id,
     statusActive: "active",
     statusConect: "conected",
+    createdAt: Timestamp.now(),
+    updatedAt: Timestamp.now(),
   });
 };
 
@@ -82,7 +89,11 @@ export const updateDevice = async ({
   id: string;
 }) => {
   writeLog({ log: "Điều chỉnh thông tin thiết bị" });
-  return await setDoc(doc(db, "devices", id), { ...device, id });
+  return await updateDoc(doc(db, "devices", id), {
+    ...device,
+    id,
+    updatedAt: Timestamp.now(),
+  });
 };
 
 export const getDetailProvideNumberOfDevice = async ({
@@ -94,4 +105,16 @@ export const getDetailProvideNumberOfDevice = async ({
     const numberDoc = await getDoc(doc(db, "provideNumbers", id));
     return numberDoc.data();
   }
+};
+
+export const DevicesSelector: Selector<RootState, object> = (state) => {
+  return {
+    devices: state.device.devices,
+    status: state.profile.statusLogin || false,
+  };
+};
+
+export const getDevice = async (id: string) => {
+  const docDevice = doc(db, "devices", id);
+  return await getDoc(docDevice);
 };

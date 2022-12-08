@@ -1,5 +1,4 @@
 import { Col } from "antd";
-
 import { images } from "../../../assets/images";
 import FormLogin from "./FormLogin";
 import "./Login.scss";

@@ -1,5 +1,6 @@
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { stat } from "fs";
+import { getDevices } from "./respository";
 
 type deviceProps = {
   deviceId: string;
@@ -20,6 +21,8 @@ const device = {
   deviceService: "",
 };
 interface IStore {
+  loading: boolean;
+  success: boolean;
   statusAdd?: boolean;
   devices?: deviceProps[] | object[];
 }
@@ -31,7 +34,9 @@ export const deviceStore = createSlice({
   name: "deviceStore",
   initialState: {
     statusAdd: false,
+    loading: false,
     devices: [],
+    success: false,
   } as unknown as IStore,
   reducers: {
     addDeviceInStore: (
@@ -47,13 +52,32 @@ export const deviceStore = createSlice({
         devices: { statusActive: "active" | "inactive" }[] | any;
       }>
     ) => Object.assign(state, { devices: action.payload.devices }),
-
-    // fetchDevices: (
-    //   state,
-    //   action: PayloadAction<{ devices: Array<object | undefined> }>
-    // ) => {
-    //   console.log(action.payload.devices, "instore devie nônnoo");
-    //   return Object.assign(state, { devices: action.payload.devices });
-    // },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(
+        getDevices.pending,
+        (state: any, action: { payload: { devices: string } } | any) => {
+          Object.assign(state, { loading: true });
+        }
+      )
+      .addCase(
+        getDevices.fulfilled,
+        (state: any, action: { payload: object } | any) => {
+          Object.assign(state, {
+            devices: action?.payload,
+            loading: false,
+            success: true,
+          });
+        }
+      )
+      .addCase(
+        getDevices.rejected,
+        (state: any, action: { payload: object } | any) => {
+          Object.assign(state, {
+            loading: false,
+          });
+        }
+      );
   },
 });

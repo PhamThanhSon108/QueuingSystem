@@ -8,19 +8,20 @@ import { Badge, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React, { ReactElement, ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../../../../../shared/hooks";
 
 interface DataType {
   id: string;
-  roleName: string;
+  name: string;
   numberOfLicensees: number;
-  roleDescription: string;
+  description: string;
 }
 
 const columns: ColumnsType<DataType> = [
   {
     title: "Tên vai trò",
-    dataIndex: "roleName",
-    key: "roleName",
+    dataIndex: "name",
+    key: "name",
     render: (text) => <a>{text}</a>,
   },
   {
@@ -30,82 +31,20 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: "Mô tả",
-    dataIndex: "roleDescription",
-    key: "roleDescription",
+    dataIndex: "description",
+    key: "description",
   },
   {
-    render: () => {
+    render: (_, { id }) => {
       return (
         <>
-          <Link to={"update"}>Cập nhật</Link>
+          <Link to={`update/${id}`}>Cập nhật</Link>
         </>
       );
     },
   },
 ];
 
-let data: DataType[] | any = [
-  {
-    id: 123,
-    roleName: "admin",
-    numberOfLicensees: "2",
-    roleDescription: "Quản lý hệ thống",
-  },
-  {
-    id: 123,
-    roleName: "admin",
-    numberOfLicensees: "2",
-    roleDescription: "Quản lý hệ thống",
-  },
-  {
-    id: 123,
-    roleName: "admin",
-    numberOfLicensees: "2",
-    roleDescription: "Quản lý hệ thống",
-  },
-  {
-    id: 123,
-    roleName: "admin",
-    numberOfLicensees: "2",
-    roleDescription: "Quản lý hệ thống",
-  },
-  {
-    id: 123,
-    roleName: "admin",
-    numberOfLicensees: "2",
-    roleDescription: "Quản lý hệ thống",
-  },
-  {
-    id: 123,
-    roleName: "admin",
-    numberOfLicensees: "2",
-    roleDescription: "Quản lý hệ thống",
-  },
-  {
-    id: 123,
-    roleName: "admin",
-    numberOfLicensees: "2",
-    roleDescription: "Quản lý hệ thống",
-  },
-  {
-    id: 123,
-    roleName: "admin",
-    numberOfLicensees: "2",
-    roleDescription: "Quản lý hệ thống",
-  },
-  {
-    id: 123,
-    roleName: "admin",
-    numberOfLicensees: "2",
-    roleDescription: "Quản lý hệ thống",
-  },
-  {
-    id: 123,
-    roleName: "admin",
-    numberOfLicensees: "2",
-    roleDescription: "Quản lý hệ thống",
-  },
-];
 const itemRender = (_: any, type: string, originalElement: ReactNode) => {
   if (type === "prev") {
     return (
@@ -120,11 +59,13 @@ const itemRender = (_: any, type: string, originalElement: ReactNode) => {
   return originalElement;
 };
 export default function TableRoleManegement() {
+  const roleSelector = useAppSelector((state) => state.role);
   return (
     <Table
+      loading={roleSelector.loading}
       className="table__device"
       columns={columns}
-      dataSource={data}
+      dataSource={roleSelector.roles}
       size={"middle"}
       pagination={{
         pageSize: 9,

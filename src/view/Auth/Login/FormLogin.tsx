@@ -8,9 +8,13 @@ import {
   setToken,
   updateProfileInStore,
 } from "../../../modules/authentication/profileStore";
-import { useAppDispatch } from "../../../hooks";
+import { useAppDispatch } from "../../../shared/hooks";
 import { getProfile } from "../../../modules/authentication/repository";
 type LoginStatus = "pending" | "fulfill" | "reject" | undefined;
+type FormData = {
+  remember?: string;
+  names: { username: string; password: string };
+};
 export default React.memo(function FormLogin() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -19,7 +23,7 @@ export default React.memo(function FormLogin() {
 
   const [loginStatus, setLoginStatus] = useState<LoginStatus>();
 
-  const handleFinish = (data: any) => {
+  const handleFinish = (data: FormData) => {
     setLoginStatus("pending");
     delete data.remember;
 

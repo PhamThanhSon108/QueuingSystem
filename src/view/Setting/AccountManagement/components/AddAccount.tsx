@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 import { v4 as uuidv4, v4 } from "uuid";
 import { Option } from "antd/lib/mentions";
-import { useAppDispatch, useAppSelector } from "../../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../../shared/hooks";
 import { useEffect } from "react";
 import { addAccount } from "../../../../modules/setting/AccountManagement/respository";
 const labelFormAccount = {
@@ -43,7 +43,13 @@ const labelFormAccount = {
   },
 };
 const DeviceTypeOption = ["Kiosk", "Display counter"];
-let RoleOption = ["Kế toán", "Bác sĩ", "Lễ tân", "Quản lý", "Admin"];
+// let RoleOption: any = [
+//   // "Kế toán",
+//   // "Bác sĩ",
+//   // "Lễ tân",
+//   // "Quản lý",
+//   // "Admin",
+// ];
 type profileType = {
   confirmPassword: string;
   email: string;
@@ -59,6 +65,11 @@ export default function AddAccount() {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
+
+  const RoleOption = useAppSelector((state) => {
+    return state.role.roles;
+  });
+
   const services: Array<any> | undefined = useAppSelector((state) => {
     return state.service.services;
   });
@@ -81,9 +92,7 @@ export default function AddAccount() {
           description: "Thêm tài khoản thành công",
         });
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   return (
@@ -169,22 +178,13 @@ export default function AddAccount() {
                       {
                         required: true,
                       },
-                      // {
-                      //   max: 99,
-                      //   whitespace: true,
-                      // },
                     ]}
                   >
-                    {/* <Input
-                      style={{ width: "100%" }}
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    /> */}
                     <Select style={{ height: "44px !important" }}>
-                      {RoleOption.map((value) => {
+                      {RoleOption.map((value: any) => {
                         return (
-                          <Option key={v4()} value={value}>
-                            {value}
+                          <Option key={value.id} value={value.name}>
+                            {value.name}
                           </Option>
                         );
                       })}
@@ -208,14 +208,7 @@ export default function AddAccount() {
                       },
                     ]}
                   >
-                    {/* <Input
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    /> */}
-                    <Input
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
+                    <Input maxLength={100} />
                   </Form.Item>
                   <Form.Item
                     label={labelFormAccount.password.label}

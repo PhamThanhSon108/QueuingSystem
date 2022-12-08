@@ -1,6 +1,5 @@
-import { Col, Input, Pagination, Row, Select, Typography, Form } from "antd";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../../hooks";
+import { Col, Row, Typography } from "antd";
+import { Link, useParams } from "react-router-dom";
 import { images } from "../../../../assets/images";
 import { useEffect, useState } from "react";
 import { getDetailProvideNumberOfDevice } from "../../../../modules/device/respository";
@@ -35,27 +34,21 @@ const labelDetailProvideNumbers = {
     label: "Trạng thái",
   },
 };
+type NumberProvideProps =
+  | {
+      id: string;
+      ordinalNumbers: string;
+      customerName: string;
+      serviceName: string;
+      createdTime: string;
+      expiredTime: string;
+      statusCreateNumbers: string;
+      supplySource: string;
+    }
+  | undefined;
 export default function DetailProvideNumbersInDevice() {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.profile.user);
-  const handleAddDevice = () => {
-    navigate("add");
-  };
   const { id } = useParams();
-  const [number, setNumber] = useState<
-    | {
-        id: string;
-        ordinalNumbers: string;
-        customerName: string;
-        serviceName: string;
-        createdTime: string;
-        expiredTime: string;
-        statusCreateNumbers: string;
-        supplySource: string;
-      }
-    | undefined
-  >();
+  const [number, setNumber] = useState<NumberProvideProps>();
   useEffect(() => {
     getDetailProvideNumberOfDevice({ id }).then((numberProvide) => {
       setNumber({
@@ -71,7 +64,7 @@ export default function DetailProvideNumbersInDevice() {
         supplySource: numberProvide?.device?.deviceName,
       });
     });
-  }, []);
+  }, [id]);
   return (
     <div className="devicepage">
       <Row className="devicepage__title">
