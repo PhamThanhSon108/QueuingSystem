@@ -8,6 +8,7 @@ import { Badge, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React, { ReactElement, ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../../../../../shared/hooks";
 const labelFormAccount = {
   userFullname: {
     label: "Họ tên",
@@ -194,6 +195,10 @@ const itemRender = (_: any, type: string, originalElement: ReactNode) => {
   return originalElement;
 };
 export default function TableAccountManagement() {
+  const accounts: Array<any> | undefined = useAppSelector((state) => {
+    return state.account.accounts;
+  });
+  data = accounts;
   return (
     <Table
       className="table__device"

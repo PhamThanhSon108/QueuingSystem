@@ -8,7 +8,7 @@ import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { images } from "../../assets/images";
 import { auth } from "../../firebase/config";
-import { useAppDispatch } from "../../hooks";
+import { useAppDispatch } from "../../shared/hooks";
 import { setToken } from "../../modules/authentication/profileStore";
 import "./Sidebar.scss";
 type MenuItem = Required<MenuProps>["items"][number];

@@ -1,16 +1,11 @@
-import {
-  ArrowLeftOutlined,
-  ArrowRightOutlined,
-  CaretLeftOutlined,
-  CaretRightOutlined,
-} from "@ant-design/icons";
-import { Badge, Space, Table, Tag } from "antd";
+import { CaretLeftOutlined, CaretRightOutlined } from "@ant-design/icons";
+import { Badge, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactNode, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../../hooks";
+import { useAppSelector } from "../../../../shared/hooks";
 
-interface DataType {
+export interface DataType {
   id: string;
   deviceId: string;
   deviceName: string;
@@ -39,8 +34,8 @@ const columns: ColumnsType<DataType> = [
   },
   {
     title: "Trạng thái hoạt động",
-    key: "activeStatus",
-    dataIndex: "activeStatus",
+    key: "statusActive",
+    dataIndex: "statusActive",
     render: (_, { statusActive }) => {
       return (
         <>
@@ -125,96 +120,6 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-let data: DataType[] | any = [
-  {
-    id: "KOI_01",
-    name: "Kiosk",
-    ipAddress: "192.168.1.10",
-    statusActive: "active",
-    statusConect: "conected",
-    serviceUse: "Khám tim mạch khám mắt",
-  },
-  {
-    id: "KOI_01",
-    name: "Kiosk",
-    ipAddress: "192.168.1.10",
-    statusActive: "active",
-    statusConect: "conected",
-    serviceUse: "Khám tim mạch khám mắt",
-  },
-  {
-    id: "KOI_01",
-    name: "Kiosk",
-    ipAddress: "192.168.1.10",
-    statusActive: "active",
-    statusConect: "conected",
-    serviceUse: "Khám tim mạch khám mắt",
-  },
-  {
-    id: "KOI_01",
-    name: "Kiosk",
-    ipAddress: "192.168.1.10",
-    statusActive: "active",
-    statusConect: "conected",
-    serviceUse: "Khám tim mạch khám mắt",
-  },
-  {
-    id: "KOI_01",
-    name: "Kiosk",
-    ipAddress: "192.168.1.10",
-    statusActive: "active",
-    statusConect: "conected",
-    serviceUse: "Khám tim mạch khám mắt",
-  },
-  {
-    id: "KOI_01",
-    name: "Kiosk",
-    ipAddress: "192.168.1.10",
-    statusActive: "active",
-    statusConect: "conected",
-    serviceUse: "Khám tim mạch khám mắt",
-  },
-  {
-    id: "KOI_01",
-    name: "Kiosk",
-    ipAddress: "192.168.1.10",
-    statusActive: "active",
-    statusConect: "conected",
-    serviceUse: "Khám tim mạch khám mắt",
-  },
-  {
-    id: "KOI_01",
-    name: "Kiosk",
-    ipAddress: "192.168.1.10",
-    statusActive: "active",
-    statusConect: "conected",
-    serviceUse: "Khám tim mạch khám mắt",
-  },
-  {
-    id: "KOI_01",
-    name: "Kiosk",
-    ipAddress: "192.168.1.10",
-    statusActive: "active",
-    statusConect: "conected",
-    serviceUse: "Khám tim mạch khám mắt",
-  },
-  {
-    id: "KOI_01",
-    name: "Kiosk",
-    ipAddress: "192.168.1.10",
-    statusActive: "active",
-    statusConect: "conected",
-    serviceUse: "Khám tim mạch khám mắt",
-  },
-  {
-    id: "KOI_01",
-    name: "Kiosk",
-    ipAddress: "192.168.1.10",
-    statusActive: "active",
-    statusConect: "conected",
-    serviceUse: "Khám tim mạch khám mắt",
-  },
-];
 const itemRender = (_: any, type: string, originalElement: ReactNode) => {
   if (type === "prev") {
     return (
@@ -228,28 +133,60 @@ const itemRender = (_: any, type: string, originalElement: ReactNode) => {
   }
   return originalElement;
 };
-export default function TableDevice() {
-  const devices = useAppSelector((state) => state.device.devices);
-  data = devices;
-  const dispatch = useAppDispatch();
+export default React.memo(function TableDevice({
+  statusActive,
+  statusConect,
+  keyWord,
+}: {
+  statusActive: "active" | "inactive" | "all";
+  statusConect: "conected" | "fail" | "all";
+  keyWord: string | undefined;
+}) {
+  const devices = useAppSelector((state) => state.device);
+  let data: DataType[] | any = devices.devices;
   const services: Array<any> | undefined = useAppSelector((state) => {
     return state.service.services;
   });
-  const DeviceServiceOption = services.reduce(
-    (serviceToShow: any, value: { id: string }) => {
-      Object.assign(serviceToShow, { [value.id]: value });
-      return serviceToShow;
-    },
-    {}
+  const DeviceServiceOption = useMemo(
+    () =>
+      services.reduce((serviceToShow: any, value: { id: string }) => {
+        Object.assign(serviceToShow, { [value.id]: value });
+        return serviceToShow;
+      }, {}),
+    [services]
   );
-  data = devices?.map((value: any) => ({
-    ...value,
-    deviceService: value?.deviceService?.map(
-      (item: any) => DeviceServiceOption[item]?.serviceName + " "
-    ),
-  }));
+  const formatData = () => {
+    data = devices.devices
+      ?.map((value: any) => ({
+        ...value,
+        deviceService: value?.deviceService?.map(
+          (item: any) => DeviceServiceOption[item]?.serviceName + " "
+        ),
+      }))
+
+      .filter((item) => {
+        if (!!keyWord && !item?.deviceService.join("")?.includes(keyWord)) {
+          return;
+        }
+        if (statusActive === "all" && statusConect === "all")
+          return !!keyWord
+            ? item?.deviceService.join("")?.includes(keyWord)
+            : item;
+        if (statusActive === "all" && statusConect != "all")
+          return item.statusConect === statusConect;
+        if (statusConect === "all" && statusActive != "all")
+          return item.statusActive === statusActive;
+        if (statusConect !== "all" && statusActive !== "all")
+          return (
+            item.statusActive === statusActive &&
+            item.statusConect === statusConect
+          );
+      });
+  };
+  formatData();
   return (
     <Table
+      loading={devices.loading}
       className="table__device"
       columns={columns}
       dataSource={data}
@@ -261,4 +198,4 @@ export default function TableDevice() {
       bordered
     />
   );
-}
+});

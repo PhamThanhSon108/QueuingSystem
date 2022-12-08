@@ -1,41 +1,19 @@
 import "./Profile.scss";
 
 import { Avatar, Button, Col, Form, Input, Row, Typography } from "antd";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-import AvatarUser from "./components/AvatarUser";
-import {
-  updateProfileInStore,
-  UserSelector,
-} from "../../../modules/authentication/profileStore";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { useDispatch } from "react-redux";
-import { getProfile } from "../../../modules/authentication/repository";
-
-// import AvatarUser from './components/AvatarUser';
-// import ModalChangePassWord from './components/ModalChangePassWord';
-// import { routerViewProfile } from './router';
+import React, { useEffect } from "react";
+import { useAppSelector } from "../../../shared/hooks";
 
 const Profile = () => {
   const linkAvata =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj4RibnQG5pD0n3phSU3-shJNYP4-dRtkzIg&usqp=CAU";
-  const history = useNavigate();
-  const dispatch = useAppDispatch();
   const [form] = Form.useForm();
   const user = useAppSelector((state) => state.profile.user);
-
   useEffect(() => {
     if (user != null) {
       form.setFieldsValue(user);
     }
   }, [form, user]);
-  useEffect(() => {
-    getProfile("iswFzKlZkLdTaJvJNEib").then((user) => {
-      dispatch(updateProfileInStore({ user }));
-    });
-  }, []);
-
   return (
     <div>
       <div className="profile-page">
@@ -80,11 +58,7 @@ const Profile = () => {
                       },
                     ]}
                   >
-                    <Input
-                      disabled={true}
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
+                    <Input disabled={true} maxLength={100} />
                   </Form.Item>
                   <Form.Item
                     label={"Số điện thoại"}
@@ -99,11 +73,7 @@ const Profile = () => {
                       },
                     ]}
                   >
-                    <Input
-                      // disabled={isDisableForm}
-                      // placeholder={formatMessage('accounts.accountFullName')}
-                      maxLength={100}
-                    />
+                    <Input maxLength={100} disabled={true} />
                   </Form.Item>
                   <Form.Item
                     label={"Email"}
@@ -115,10 +85,7 @@ const Profile = () => {
                       },
                     ]}
                   >
-                    <Input
-                    // disabled={isDisableForm}
-                    // placeholder={formatMessage('accounts.email')}
-                    />
+                    <Input disabled={true} />
                   </Form.Item>
                 </div>
               </Col>
@@ -137,11 +104,7 @@ const Profile = () => {
                       },
                     ]}
                   >
-                    <Input
-                      disabled={true}
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
+                    <Input disabled={true} maxLength={100} />
                   </Form.Item>
                   <Form.Item
                     label={"Mật khẩu"}
@@ -156,15 +119,11 @@ const Profile = () => {
                       },
                     ]}
                   >
-                    <Input
-                      // disabled={isDisableForm}
-                      // placeholder={formatMessage('accounts.accountFullName')}
-                      maxLength={100}
-                    />
+                    <Input maxLength={100} disabled={true} />
                   </Form.Item>
                   <Form.Item
                     label={"Vai trò"}
-                    name="role"
+                    name="roleName"
                     rules={[
                       {
                         required: true,
@@ -172,34 +131,23 @@ const Profile = () => {
                       },
                     ]}
                   >
-                    <Input
-                    // disabled={isDisableForm}
-                    // placeholder={formatMessage('accounts.email')}
-                    />
+                    <Input disabled={true} />
                   </Form.Item>
                 </div>
               </Col>
             </Row>
           </Form>
-          {/* <RightMenu arrayAction={arrayAction} /> */}
         </div>
-        {/* <ModalChangePassWord isModalVisible={isVisible} setIsModalVisible={setIsVisible} /> */}
 
         <div className="button-center__box profile-button-update">
-          {/* {!isDisableForm && ( */}
           <>
-            <Button className="cancel-button mx-5" onClick={() => {}}>
-              {/* {formatMessage('common.cancel')} */}
-            </Button>
+            <Button className="cancel-button mx-5" onClick={() => {}}></Button>
             <Button
               type="primary"
               className="normal-button"
               htmlType="submit"
               form="userProfileForm"
-              // loading={updateAccounts?.status === 'loading'}
-            >
-              {/* {formatMessage('common.save')} */}
-            </Button>
+            ></Button>
           </>
           )
         </div>

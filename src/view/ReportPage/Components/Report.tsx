@@ -6,8 +6,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { images } from "../../../assets/images";
 import type { Moment } from "moment";
-import { useAppDispatch } from "../../../hooks";
-import TableReport from "./TableReport";
+import { useAppDispatch, useAppSelector } from "../../../shared/hooks";
+import TableReport, { formatDate } from "./TableReport";
+import { ExportCSV } from "./Excel/ExportCSV";
+import moment from "moment";
 const { RangePicker } = DatePicker;
 type RangeValue = [Moment | null, Moment | null] | null;
 const Report: React.FC = () => {
@@ -31,6 +33,25 @@ const Report: React.FC = () => {
       setDates(null);
     }
   };
+
+  const numbers = useAppSelector(
+    (state) => state.provideNumbers.provideNumbers
+  );
+  moment.defaultFormat = "DD.MM.YYYY HH:mm";
+  const data = numbers.map((item: any) => {
+    return {
+      id: item?.id,
+      ordinalNumbers: item?.service?.option?.preFix
+        ? item?.ordinalNumbers + item?.service?.serviceId
+        : item?.service?.serviceId + item?.ordinalNumbers,
+      customerName: item?.customerName,
+      serviceName: item?.service?.serviceName,
+      createdTime: formatDate(item?.createdAt.seconds),
+      expiredTime: formatDate(item?.createdAt.seconds, true),
+      statusCreateNumbers: "waiting",
+      supplySource: item?.device?.deviceName,
+    };
+  });
 
   return (
     <div className="devicepage">
@@ -65,12 +86,11 @@ const Report: React.FC = () => {
             <div className="devicepage__body-modify-container-icon">
               {images.icon.downLoadFile}
             </div>
-            <Link
-              to={"add"}
-              className="devicepage__body-modify-container-label"
-            >
-              Tải về
-            </Link>
+            <ExportCSV csvData={data} fileName={"report"}>
+              <Link to={""} className="devicepage__body-modify-container-label">
+                Tải về
+              </Link>
+            </ExportCSV>
           </div>
         </Col>
       </Row>

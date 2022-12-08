@@ -1,4 +1,3 @@
-import React from "react";
 import FormItem from "antd/es/form/FormItem";
 import { Button, Form, Input, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -29,10 +28,10 @@ export default function FormForgotPassword({
         name="email"
         rules={[
           { required: true, message: "Bạn chưa nhập email!" },
-          {
-            pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-            message: "Bạn nhập sai định dạng của email",
-          },
+          // {
+          //   pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+          //   message: "Bạn nhập sai định dạng của email",
+          // },
         ]}
       >
         <Input className={"login__input"} placeholder="Email" />

@@ -10,6 +10,7 @@ import {
   where,
   updateDoc,
   Timestamp,
+  orderBy,
 } from "firebase/firestore";
 import { v4 } from "uuid";
 import { db } from "../../firebase/config";
@@ -65,6 +66,7 @@ export const provideNumber = async ({ id }: { id: string }) => {
     ordinalNumbers: newOrdinalNumbers,
     customerName: "Pham Thanh Son",
     service: {
+      id: currentService?.id,
       serviceId: currentService?.serviceId,
       serviceName: currentService?.serviceName,
       option: {
@@ -78,6 +80,7 @@ export const provideNumber = async ({ id }: { id: string }) => {
       id: devices[0]?.id,
     },
     createdAt: Timestamp.now(),
+    statusCreateNumbers: "waiting",
   };
   await setDoc(doc(db, "provideNumbers", orderNumber.id), orderNumber);
   await updateDoc(doc(db, "services", currentService?.id), {
@@ -88,12 +91,13 @@ export const provideNumber = async ({ id }: { id: string }) => {
 
 export const getProvideNumbers = async () => {
   let numbers: Array<undefined | object> = [];
-  const provideNumbersCollection = collection(db, "provideNumbers");
+  const provideNumbersCollection = query(
+    collection(db, "provideNumbers"),
+    orderBy("createdAt", "desc")
+  );
   const querySnapshot = await getDocs(provideNumbersCollection);
 
   querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    // console.log(doc.id, " => ", doc.data());
     numbers.push(doc.data());
   });
   return numbers;

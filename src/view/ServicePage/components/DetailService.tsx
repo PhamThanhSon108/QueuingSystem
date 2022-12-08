@@ -3,13 +3,15 @@ import { Select } from "antd";
 import Search from "antd/lib/input/Search";
 import { Option } from "antd/lib/mentions";
 import { DatePicker } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import type { Moment } from "moment";
 import { images } from "../../../assets/images";
 import TableCreateNumbers from "./TableService/CreateNumbers";
-import { useAppSelector } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../shared/hooks";
+import { getNumbersProvidedbyService } from "../../../modules/service/respository";
+import { serviceStore } from "../../../modules/service/serviceStore";
 type RangeValue = [Moment | null, Moment | null] | null;
 const { RangePicker } = DatePicker;
 
@@ -29,6 +31,8 @@ export default function DetailService() {
   const [dates, setDates] = useState<RangeValue>(null);
   const [value, setValue] = useState<RangeValue>(null);
   const { id } = useParams();
+  const dispatch = useAppDispatch();
+
   const services: Array<any> | undefined = useAppSelector((state) => {
     return state.service.services;
   });
@@ -50,6 +54,16 @@ export default function DetailService() {
       setDates(null);
     }
   };
+
+  useEffect(() => {
+    getNumbersProvidedbyService({ id: id }).then((numbers) => {
+      dispatch(
+        serviceStore.actions.fetchNumbersProvidedbyService({
+          numbersProvidedbyService: numbers,
+        })
+      );
+    });
+  }, []);
   return (
     <div className="wrap-page">
       <Row className="page-title">

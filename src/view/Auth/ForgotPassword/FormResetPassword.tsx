@@ -1,6 +1,5 @@
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { Button, Form, Input, Typography } from "antd";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function FormResetPassword() {
@@ -25,29 +24,7 @@ export default function FormResetPassword() {
       <Typography>
         <div className="reset__title">Đặt lại mật khẩu</div>
       </Typography>
-      {/* <Form.List
-        name="names"
-        // rules={[
-        //   {
-        //     validator: async (_, names) => {
-        //       if (
-        //         names.password.length < 6 ||
-        //         names.confirmpassword.length < 6
-        //       ) {
-        //         console.log(names, "names");
-        //         if (names.password.length !== names.confirmpassword.length)
-        //           return Promise.reject(
-        //             new Error("Mật khẩu ít nhất phải 6 ký tự")
-        //           );
-        //       }
-        //       if (names.password.length !== names.confirmpassword.length) {
-        //         return Promise.reject(new Error("Mật khẩu không khớp"));
-        //       }
-        //     },
-        //   },
-        // ]}
-      >
-        {(fields, { add, remove }, { errors }) => ( */}
+
       <>
         <div className="loginform_field__label">
           <label>Mật khẩu</label>

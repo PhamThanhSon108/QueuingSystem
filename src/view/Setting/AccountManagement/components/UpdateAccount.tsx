@@ -1,10 +1,15 @@
 import { Button, Col, Form, Input, Row, Select, Typography } from "antd";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { v4 as uuidv4, v4 } from "uuid";
+import { v4 as v4 } from "uuid";
 import { Option } from "antd/lib/mentions";
-import { useAppDispatch, useAppSelector } from "../../../../hooks";
+import { useAppSelector } from "../../../../shared/hooks";
+import { useEffect } from "react";
+import {
+  getDetailAccount,
+  updateAccount,
+} from "../../../../modules/setting/AccountManagement/respository";
 const labelFormAccount = {
   userFullname: {
     label: "Họ tên",
@@ -32,32 +37,36 @@ const labelFormAccount = {
   },
 };
 const DeviceTypeOption = ["Kiosk", "Display counter"];
-let DeviceServiceOption = [
-  "Khám tim mạch",
-  "Khám sản phụ khoa",
-  "Khám răng hàm mặt",
-  "Khám tai mũi họng",
-  "Khám hô hấp",
-  "Khám tổng quát",
-];
 
 export default function UpdateAccount() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-
-  const dispatch = useAppDispatch();
+  const { id } = useParams();
   const services: Array<any> | undefined = useAppSelector((state) => {
     return state.service.services;
   });
-  DeviceServiceOption = services.map((value) => value?.serviceName);
+  const RoleOption = useAppSelector((state) => {
+    return state.role.roles;
+  });
   const handleCancel = () => {
     navigate("/setting/account");
   };
-  const handleAddDevice = () => {};
-  const handleOnfinish = (data: any) => {
-    navigate("/setting/account");
-  };
 
+  const handleOnfinish = (data: any) => {
+    if (id && data)
+      updateAccount({ id, user: data }).then(() => {
+        navigate("/setting/account");
+      });
+  };
+  useEffect(() => {
+    if (id)
+      getDetailAccount({ id }).then((user: any) => {
+        if (user) {
+          form.setFieldsValue(user);
+          form.setFieldValue("confirmPassword", user?.password);
+        }
+      });
+  }, []);
   return (
     <div className="devicepage">
       <Row className="devicepage__title">
@@ -111,10 +120,7 @@ export default function UpdateAccount() {
                       },
                     ]}
                   >
-                    <Input
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
+                    <Input maxLength={100} />
                   </Form.Item>
                   <Form.Item
                     label={labelFormAccount.email.label}
@@ -129,10 +135,7 @@ export default function UpdateAccount() {
                       },
                     ]}
                   >
-                    <Input
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
+                    <Input maxLength={100} disabled />
                   </Form.Item>
                   <Form.Item
                     label={labelFormAccount.role.label}
@@ -141,26 +144,16 @@ export default function UpdateAccount() {
                       {
                         required: true,
                       },
-                      // {
-                      //   max: 99,
-                      //   whitespace: true,
-                      // },
                     ]}
                   >
-                    {/* <Input
-                      style={{ width: "100%" }}
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    /> */}
-                    <Select
-                      mode="multiple"
-                      style={{ height: "44px !important" }}
-                    >
-                      {DeviceServiceOption.map((value) => (
-                        <Option key={v4()} value={value}>
-                          {value}
-                        </Option>
-                      ))}
+                    <Select style={{ height: "44px !important" }}>
+                      {RoleOption.map((value: any) => {
+                        return (
+                          <Option key={value.id} value={value.name}>
+                            {value.name}
+                          </Option>
+                        );
+                      })}
                     </Select>
                   </Form.Item>
                 </div>
@@ -181,14 +174,7 @@ export default function UpdateAccount() {
                       },
                     ]}
                   >
-                    {/* <Input
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    /> */}
-                    <Input
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
+                    <Input maxLength={100} />
                   </Form.Item>
                   <Form.Item
                     label={labelFormAccount.password.label}
@@ -203,11 +189,7 @@ export default function UpdateAccount() {
                       },
                     ]}
                   >
-                    <Input
-                      type={"password"}
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
+                    <Input type={"password"} maxLength={100} />
                   </Form.Item>
                   <Form.Item
                     label={labelFormAccount.confirmPassword.label}
@@ -222,11 +204,7 @@ export default function UpdateAccount() {
                       },
                     ]}
                   >
-                    <Input
-                      type={"password"}
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
+                    <Input type={"password"} maxLength={100} />
                   </Form.Item>
                   <Form.Item
                     label={labelFormAccount.status.label}
@@ -235,16 +213,16 @@ export default function UpdateAccount() {
                       {
                         required: true,
                       },
-                      {
-                        max: 99,
-                        whitespace: true,
-                      },
                     ]}
                   >
-                    <Input
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    />
+                    <Select style={{ height: "44px !important" }}>
+                      <Option key={v4()} value="active">
+                        Hoạt động
+                      </Option>
+                      <Option key={v4()} value="inactive">
+                        Ngưng hoạt động
+                      </Option>
+                    </Select>
                   </Form.Item>
                 </div>
               </Col>

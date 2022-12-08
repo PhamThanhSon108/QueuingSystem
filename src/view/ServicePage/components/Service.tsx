@@ -9,13 +9,16 @@ import TableDevice from "../../DevicePage/components/TableDevice";
 import type { Moment } from "moment";
 import ServiceTable from "./TableService/ServiceTable";
 import { getServices } from "../../../modules/service/respository";
-import { useAppDispatch } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../shared/hooks";
 import { serviceStore } from "../../../modules/service/serviceStore";
 const { RangePicker } = DatePicker;
 type RangeValue = [Moment | null, Moment | null] | null;
 export default function Service() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const services = useAppSelector((state) => state.service.services);
+
   const [dates, setDates] = useState<RangeValue>(null);
   const [value, setValue] = useState<RangeValue>(null);
   const disabledDate = (current: Moment) => {

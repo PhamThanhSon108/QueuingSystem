@@ -1,18 +1,11 @@
-import { Col, Input, Pagination, Row, Select, Typography, Form } from "antd";
-import { Option } from "antd/lib/mentions";
-
+import { Col, Row, Typography } from "antd";
 import "../DevicePage.scss";
-import Search from "antd/lib/input/Search";
-import TableDevice from "./TableDevice";
 import { images } from "../../../assets/images";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getDevices } from "../../../modules/device/respository";
-import { useEffect } from "react";
-import {
-  addDeviceInStore,
-  deviceStore,
-} from "../../../modules/device/deviceStore";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { getDevice } from "../../../modules/device/respository";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { publicToast } from "../../../components/toast";
+import { useAppSelector } from "../../../shared/hooks";
 const labelFormDevice = {
   deviceId: {
     label: "Mã thiết bị",
@@ -38,15 +31,40 @@ const labelFormDevice = {
 };
 export default function DetailDevice() {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const handleAddDevice = () => {
-    navigate("add");
-  };
   const { id } = useParams();
-  const devices: Array<any> | undefined = useAppSelector((state) => {
-    return state.device.devices;
-  });
-  const device = devices?.find((value) => value.id == id);
+  const [device, setDevice] = useState<{} | any>({});
+
+  const services: Array<{ serviceName: string; id: string }> | undefined =
+    useAppSelector((state) => {
+      return state.service.services;
+    });
+
+  const getNameOfServices = () => {
+    const deviceService = device?.deviceService?.map((item: {}) => {
+      return services.find((service) => service.id === item)?.serviceName;
+    });
+    return deviceService?.join(" ");
+  };
+
+  useEffect(() => {
+    if (id != null) {
+      getDevice(id)
+        .then((device) => {
+          setDevice(device.data());
+        })
+        .catch(() => {
+          publicToast({
+            type: "error",
+            message: "Lỗi",
+            description: "Có lỗi trong quá trình xử lý",
+          });
+          navigate("/device");
+        });
+    }
+  }, [id]);
+
+  const deviceService = getNameOfServices();
+
   return (
     <div className="devicepage">
       <Row className="devicepage__title">
@@ -88,7 +106,7 @@ export default function DetailDevice() {
           <Row>
             <div className="detail__page-list-length">
               <div>{labelFormDevice.deviceService.label}</div>
-              <span>{device?.deviceService}</span>
+              <span>{deviceService}</span>
             </div>
           </Row>
         </Col>

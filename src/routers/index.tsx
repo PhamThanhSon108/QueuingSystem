@@ -27,12 +27,18 @@ import UpdateAccount from "../view/Setting/AccountManagement/components/UpdateAc
 import { RoleManagementPage } from "../view/Setting/RoleManagement";
 import AddRole from "../view/Setting/RoleManagement/components/AddRole";
 import RoleManagement from "../view/Setting/RoleManagement/components/RoleManagement";
+import UpdateRole from "../view/Setting/RoleManagement/components/UpdateRole";
 import UserLogManagementPage from "../view/Setting/UserLogManagement";
 import UserLogManegement from "../view/Setting/UserLogManagement/components/TableUserLogManagement/UserLogManegement";
 type routeType = {
+  permisioncode?: string;
   path: string;
   component: React.ReactElement;
-  children?: { path: string; component: React.ReactElement }[];
+  children?: {
+    path: string;
+    component: React.ReactElement;
+    permisioncode?: string;
+  }[];
 };
 export const privateRoutes: routeType[] = [
   { path: routes.home, component: <Homepage /> },
@@ -41,11 +47,20 @@ export const privateRoutes: routeType[] = [
     path: routes.device,
     component: <DevicePage />,
     children: [
-      { path: "", component: <Device /> },
-      { path: "add", component: <AddDevice /> },
-      { path: "update/:id", component: <UpdateDevice /> },
-      { path: "detail/:id", component: <DetailDevice /> },
+      { path: "", component: <Device />, permisioncode: "readDevices" },
+      { path: "add", component: <AddDevice />, permisioncode: "addDevice" },
       {
+        path: "update/:id",
+        component: <UpdateDevice />,
+        permisioncode: "updateDevice",
+      },
+      {
+        path: "detail/:id",
+        component: <DetailDevice />,
+        permisioncode: "readDevices",
+      },
+      {
+        permisioncode: "readProvideNumber",
         path: "providenumbers/:id",
         component: <DetailProvideNumbersInDevice />,
       },
@@ -55,18 +70,34 @@ export const privateRoutes: routeType[] = [
     path: routes.service,
     component: <ServicePage />,
     children: [
-      { path: "", component: <Service /> },
-      { path: "add", component: <AddService /> },
-      { path: "detail/:id", component: <DetailService /> },
-      { path: "update/:id", component: <UpdateService /> },
+      { path: "", component: <Service />, permisioncode: "readServices" },
+      { path: "add", component: <AddService />, permisioncode: "addService" },
+      {
+        path: "detail/:id",
+        component: <DetailService />,
+        permisioncode: "readServices",
+      },
+      {
+        path: "update/:id",
+        component: <UpdateService />,
+        permisioncode: "updateService",
+      },
     ],
   },
   {
     path: routes.provideNumbers,
     component: <ProvideNumberPage />,
     children: [
-      { path: "", component: <ProvideNumbers /> },
-      { path: "create", component: <ProvideNewNumber /> },
+      {
+        path: "",
+        component: <ProvideNumbers />,
+        permisioncode: "readProvideNumber",
+      },
+      {
+        path: "create",
+        component: <ProvideNewNumber />,
+        permisioncode: "addProvideNumber",
+      },
     ],
   },
   {
@@ -78,17 +109,30 @@ export const privateRoutes: routeType[] = [
     path: routes.settingRole,
     component: <RoleManagementPage />,
     children: [
-      { path: "", component: <RoleManagement /> },
-      { path: "add", component: <AddRole /> },
+      { path: "", component: <RoleManagement />, permisioncode: "readRoles" },
+      { path: "add", component: <AddRole />, permisioncode: "addRole" },
+      {
+        path: "update/:id",
+        component: <UpdateRole />,
+        permisioncode: "updateRole",
+      },
     ],
   },
   {
     path: routes.settingAccount,
     component: <AccountManagementPage />,
     children: [
-      { path: "", component: <AccountManagement /> },
-      { path: "add", component: <AddAccount /> },
-      { path: "update/:id", component: <UpdateAccount /> },
+      {
+        path: "",
+        component: <AccountManagement />,
+        permisioncode: "readAccounts",
+      },
+      { path: "add", component: <AddAccount />, permisioncode: "addAccount" },
+      {
+        path: "update/:id",
+        component: <UpdateAccount />,
+        permisioncode: "updateAccount",
+      },
     ],
   },
   {
@@ -105,6 +149,5 @@ export const privateRoutes: routeType[] = [
 export const publicRoutes: routeType[] = [
   //auth
   { path: routes.login, component: <Login /> },
-
   { path: routes.reset, component: <ForgotPassword /> },
 ];

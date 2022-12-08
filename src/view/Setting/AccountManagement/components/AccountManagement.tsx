@@ -1,10 +1,13 @@
 import { Col, Row, Select, Typography } from "antd";
 import { Option } from "antd/lib/mentions";
 import Search from "antd/lib/input/Search";
-import { useAppDispatch } from "../../../../hooks";
+import { useAppDispatch } from "../../../../shared/hooks";
 import { Link, useNavigate } from "react-router-dom";
 import { images } from "../../../../assets/images";
 import TableAccountManagement from "./TableAccountManagement";
+import { useEffect } from "react";
+import { getAccounts } from "../../../../modules/setting/AccountManagement/respository";
+import { accountStore } from "../../../../modules/setting/AccountManagement/accountStore";
 
 type deviceProps = {
   setStatus?: (value: string) => void;
@@ -15,7 +18,11 @@ export default function AccountManagement({ setStatus }: deviceProps) {
   const handleAddDevice = () => {
     navigate("add");
   };
-
+  useEffect(() => {
+    getAccounts().then((user) => {
+      dispatch(accountStore.actions.fetchAccount({ accounts: user }));
+    });
+  }, []);
   return (
     <div className="devicepage">
       <Row className="devicepage__title">

@@ -1,11 +1,12 @@
 import { Button, Col, Form, Input, Row, Select, Typography } from "antd";
-import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { useAppSelector } from "../../../shared/hooks";
 import { addDevice } from "../../../modules/device/respository";
 import "./AddDevice.scss";
 import { v4 as uuidv4, v4 } from "uuid";
 import { Option } from "antd/lib/mentions";
+import { publicToast } from "../../../components/toast";
+import { useMemo } from "react";
 const labelFormDevice = {
   deviceId: {
     label: "Mã thiết bị",
@@ -38,29 +39,39 @@ let DeviceServiceOption: string[] | { name: string; id: string }[] = [
   "Khám hô hấp",
   "Khám tổng quát",
 ];
-type deviceProps = {
-  setStatus?: (value: string) => void;
-};
-export default function AddDevice({ setStatus }: deviceProps) {
+
+export default function AddDevice() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const services: Array<{ serviceName: string; id: string }> | undefined =
+    useAppSelector((state) => {
+      return state.service.services;
+    });
 
-  const dispatch = useAppDispatch();
-  const services: Array<any> | undefined = useAppSelector((state) => {
-    return state.service.services;
-  });
-  DeviceServiceOption = services.map((value) => ({
-    name: value?.serviceName,
-    id: value?.id,
-  }));
+  DeviceServiceOption = useMemo(
+    () =>
+      services.map((value) => ({
+        name: value?.serviceName,
+        id: value?.id,
+      })),
+    []
+  );
   const handleCancel = () => {
     navigate("/device");
   };
-  const handleAddDevice = () => {};
-  const handleOnfinish = (data: any) => {
-    addDevice({ device: data, id: uuidv4() }).then(() => {
-      navigate("/device");
-    });
+  const handleOnfinish = (data: FormData) => {
+    addDevice({ device: data, id: uuidv4() })
+      .then(() => {
+        navigate("/device");
+      })
+      .catch((err) => {
+        publicToast({
+          type: "error",
+          message: "Lỗi",
+          description: "Có lỗi trong quá trình xử lý",
+        });
+        navigate("/device");
+      });
   };
 
   return (
@@ -221,17 +232,8 @@ export default function AddDevice({ setStatus }: deviceProps) {
                       {
                         required: true,
                       },
-                      // {
-                      //   max: 99,
-                      //   whitespace: true,
-                      // },
                     ]}
                   >
-                    {/* <Input
-                      style={{ width: "100%" }}
-                      // placeholder={formatMessage('accounts.userName')}
-                      maxLength={100}
-                    /> */}
                     <Select
                       mode="multiple"
                       style={{ height: "44px !important" }}

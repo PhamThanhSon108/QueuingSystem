@@ -1,8 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export const serviceStore = createSlice({
   name: "serviceStore",
-  initialState: { services: [] },
+  initialState: { services: [], numbersProvidedbyService: [] },
   reducers: {
+    fetchNumbersProvidedbyService: (
+      state,
+      action: PayloadAction<{
+        numbersProvidedbyService: object[] | any;
+      }>
+    ) =>
+      Object.assign(state, {
+        numbersProvidedbyService: action.payload.numbersProvidedbyService,
+      }),
     fetchService: (
       state,
       action: PayloadAction<{
